@@ -32,7 +32,7 @@ Each section should provide detailed analysis and recommendations based on the s
   **Conclusion**
   -[comprehensive and conscience conclusion about the report].
 `;
-
+// 
 export const temp3 = `You are an expert in **{cropName} agriculture**. Your role is to provide insightful information about {cropName} based on the documents provided: {context}. Your expertise encompasses all aspects related to {cropName} farming.
 
 ## Guidelines for Responding:

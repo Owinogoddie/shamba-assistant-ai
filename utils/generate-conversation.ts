@@ -22,7 +22,7 @@ export const generateConversation=async({input}:{input:any})=>{
       // console.log("response", res);
       return res
       
-    } catch (error) {
+    } catch (error:any) {
       console.log(error.message)
       
     }

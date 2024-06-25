@@ -10,7 +10,7 @@ export const saveToSupabase = async (docs:any, table_name:string) => {
   const supabaseAPIKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const supabaseURL = process.env.SUPABASE_URL;
 
-  const client = createClient(supabaseURL, supabaseAPIKey);
+  const client = createClient(supabaseURL!, supabaseAPIKey!);
 
   try {
     await SupabaseVectorStore.fromDocuments(docs, embeddings, {
@@ -18,7 +18,7 @@ export const saveToSupabase = async (docs:any, table_name:string) => {
       tableName: table_name,
     });
     console.log("🤗😍🤑 WOOOOOHOOOO!!!!SUCCESSFULLY SAVED TO SUPABASE");
-  } catch (error) {
+  } catch (error:any) {
     console.log("SAVE_TO_SUPABASE_ERROR", error.message);
     throw error;
   }

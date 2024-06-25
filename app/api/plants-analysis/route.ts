@@ -1,9 +1,14 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { HumanMessage } from "@langchain/core/messages";
 
-export async function POST(req) {
-  const body = await req.json();
+interface RequestBody {
+  imageBuffer: string;
+  text: string;
+}
+
+export async function POST(req: NextRequest) {
+  const body: RequestBody = await req.json();
   const { imageBuffer, text } = body;
 
   try {
@@ -27,12 +32,18 @@ export async function POST(req) {
         ],
       }),
     ];
+    
     const response = await vision.invoke(input);
 
     console.log(response.content);
 
-    return new NextResponse(response.content, { status: 200 });
-  } catch (error) {
+    // Convert response.content to string
+    const responseContent = typeof response.content === 'string' 
+      ? response.content 
+      : JSON.stringify(response.content);
+
+    return new NextResponse(responseContent, { status: 200 });
+  } catch (error: any) {
     console.log("ERROR_ON_MULTIMODAL", error.message);
     return new NextResponse("Internal server error", { status: 500 });
   }

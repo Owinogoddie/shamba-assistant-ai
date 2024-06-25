@@ -1,35 +1,44 @@
-"use client";
+import React, { useState, useRef } from "react";
+import { useDropzone, DropzoneRootProps, DropzoneInputProps, Accept } from "react-dropzone";
+import Webcam, { WebcamProps } from "react-webcam";
 import axios from "axios";
 import { LucideCamera } from "lucide-react";
 import Image from "next/image";
-import React, { useState, useRef } from "react";
-import { useDropzone } from "react-dropzone";
-import Webcam from "react-webcam";
 
-export const MultimodalInput = ({ onResponse, onLoadingChange }) => {
-  const [image, setImage] = useState(null);
-  //   const [text, setText] = useState("");
-  const [response, setResponse] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [cameraActive, setCameraActive] = useState(false);
-  const webcamRef = useRef(null);
+type MultimodalInputProps = {
+  onResponse: (data: any) => void;
+  onLoadingChange: (loading: boolean) => void;
+};
 
+const MultimodalInput: React.FC<MultimodalInputProps> = ({
+  onResponse,
+  onLoadingChange,
+}) => {
+  const [image, setImage] = useState<string | null>(null);
+  const [response, setResponse] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [cameraActive, setCameraActive] = useState<boolean>(false);
+  const webcamRef = useRef<Webcam>(null);
   const { getRootProps, getInputProps } = useDropzone({
-    accept: "image/jpeg, image/png",
+    accept: {
+      'image/jpeg': ['.jpg', '.jpeg'],
+      'image/png': ['.png']
+    } as Accept,
     onDrop: (acceptedFiles) => {
       const reader = new FileReader();
-      reader.onload = () => setImage(reader.result);
-
+      reader.onload = () => setImage(reader.result as string);
       reader.readAsDataURL(acceptedFiles[0]);
     },
   });
 
-  //   const handleTextChange = (event) => setText(event.target.value);
   const captureImage = () => {
-    const imageSrc = webcamRef.current.getScreenshot();
-    setImage(imageSrc);
-    setCameraActive(false);
+    const imageSrc = webcamRef.current?.getScreenshot();
+    if (imageSrc) {
+      setImage(imageSrc);
+      setCameraActive(false);
+    }
   };
+
   const handleSubmit = async () => {
     if (!image) {
       alert("Please select an image and provide text.");
@@ -43,7 +52,7 @@ export const MultimodalInput = ({ onResponse, onLoadingChange }) => {
       const base64Image = image.split(",")[1];
       const response = await axios.post("/api/plants-analysis", {
         imageBuffer: base64Image,
-        text: "nothing",
+        text: "nothing", // Replace with actual text value if needed
       });
       console.log(response.data);
       if (onResponse) {
@@ -58,9 +67,11 @@ export const MultimodalInput = ({ onResponse, onLoadingChange }) => {
       setImage(null);
     }
   };
-  const videoConstraints = {
-    facingMode: { exact: "environment" }
+
+  const videoConstraints: WebcamProps["videoConstraints"] = {
+    facingMode: { exact: "environment" },
   };
+
   return (
     <div className="flex flex-col gap-8 p-8 items-center">
       <h1 className="text-lg text-center border-b-4 text-slate-700 font-bold w-fit">
@@ -79,19 +90,17 @@ export const MultimodalInput = ({ onResponse, onLoadingChange }) => {
               cursor: "pointer",
             }}
           >
-            <input {...getInputProps()} />
+            <input {...getInputProps() as DropzoneInputProps} />
             <p>Drag & drop an image here, or click to select</p>
           </div>
-         {
-            !cameraActive &&(
-                <div
-                onClick={() => setCameraActive(true)}
-                className="px-4 cursor-pointer flex gap-2 item-center justify-center py-2 bg-blue-500 text-white rounded-lg mt-4"
-              >
-                Take Picture <LucideCamera className="h-5 w-5"/>
-              </div>
-            )
-         }
+          {!cameraActive && (
+            <div
+              onClick={() => setCameraActive(true)}
+              className="px-4 cursor-pointer flex gap-2 items-center justify-center py-2 bg-blue-500 text-white rounded-lg mt-4"
+            >
+              Take Picture <LucideCamera className="h-5 w-5" />
+            </div>
+          )}
         </div>
       )}
       {cameraActive && (
@@ -101,21 +110,23 @@ export const MultimodalInput = ({ onResponse, onLoadingChange }) => {
             ref={webcamRef}
             screenshotFormat="image/jpeg"
             className="w-full h-auto rounded-lg"
-            videoConstraints={videoConstraints} 
+            videoConstraints={videoConstraints}
           />
           <div className="flex items-center gap-2">
-          <button
-            onClick={captureImage}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg mt-4"
-          >
-            Capture
-          </button>
-          <button
-            onClick={()=>{setCameraActive(false)}}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg mt-4"
-          >
-            Cancel
-          </button>
+            <button
+              onClick={captureImage}
+              className="px-4 py-2 bg-blue-500 text-white rounded-lg mt-4"
+            >
+              Capture
+            </button>
+            <button
+              onClick={() => {
+                setCameraActive(false);
+              }}
+              className="px-4 py-2 bg-blue-500 text-white rounded-lg mt-4"
+            >
+              Cancel
+            </button>
           </div>
         </div>
       )}
@@ -128,13 +139,6 @@ export const MultimodalInput = ({ onResponse, onLoadingChange }) => {
           className="object-contain rounded-lg"
         />
       )}
-      {/* <input
-        className="px-4 py-2 focus:outline-none border rounded-lg w-96"
-        type="text"
-        value={text}
-        onChange={handleTextChange}
-        placeholder="Enter text prompt"
-      /> */}
       <button
         className="px-4 py-2 bg-slate-600 w-96 rounded-lg text-white"
         onClick={handleSubmit}
@@ -146,3 +150,5 @@ export const MultimodalInput = ({ onResponse, onLoadingChange }) => {
     </div>
   );
 };
+
+export default MultimodalInput;

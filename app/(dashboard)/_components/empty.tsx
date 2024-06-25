@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import React from 'react'
 
-export const Empty = () => {
+export const Empty = ({text}:{text?:string}) => {
   return (
     <div className="flex flex-col items-center h-full justify-center space-y-6">
         <div className="w-72 h-72 relative ">
@@ -13,7 +13,7 @@ export const Empty = () => {
             />
 
         </div>
-            <p className="font-semibold">No conversations </p>
+            <p className="font-semibold">{text || 'No conversations'}</p>
     </div>
   )
 }

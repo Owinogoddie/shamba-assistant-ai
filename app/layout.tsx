@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "AgriAide",
-  description: "AgriAide - Your Digital Farming Companion",
+  title: "Shamba assistant-ai",
+  description: "Shamba-assistant - Your Digital Farming Companion",
   icons:{
     icon:"/logo.svg"
   }

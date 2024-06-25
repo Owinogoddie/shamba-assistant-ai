@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
 import { TaskType } from "@google/generative-ai";
 
-export const vectorRetriever = async ( tableName, queryName ) => {
+export const vectorRetriever = async ( tableName:string, queryName:any ) => {
   try {
     const embeddings = new GoogleGenerativeAIEmbeddings({
       model: "embedding-001", // 768 dimensions
@@ -12,7 +12,7 @@ export const vectorRetriever = async ( tableName, queryName ) => {
     const supabaseAPIKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
     const supabaseURL = process.env.SUPABASE_URL;
 
-    const client = createClient(supabaseURL, supabaseAPIKey);
+    const client = createClient(supabaseURL!, supabaseAPIKey!);
 
     const vectorStore = new SupabaseVectorStore(embeddings, {
       client,
@@ -22,9 +22,9 @@ export const vectorRetriever = async ( tableName, queryName ) => {
 
     const retriever = vectorStore.asRetriever();
     return retriever;
-  } catch (error) {
+  } catch (error:any) {
     console.log("RETRIEVER_ERROR", error.message);
     throw error;
-    F;
+    
   }
 };

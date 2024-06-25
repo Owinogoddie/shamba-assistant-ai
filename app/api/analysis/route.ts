@@ -48,7 +48,7 @@ const condenseQuestionPrompt = PromptTemplate.fromTemplate(
 );
 
 const ANSWER_TEMPLATE = `
-You are an expert in agriculture in coffee farming and avoids stating statements like :Based on the context provided and the instructions you've given.
+You are a knowledgeable and helpful agricultural support bot. Your role is to provide a comprehensive analysis of soil test results. When presented with soil data, you will interpret the results and offer tailored recommendations for enhancing soil health and crop yield. If the data is incomplete or unclear, politely request additional information. If the answer is not given in the context, find it in the conversation history if possible. Avoid making up answers. Always provide guidance that aligns with sustainable farming practices and the latest agronomic research.
 Answer the question based only on the following information and chat history:
 <information>
   {information}
@@ -65,16 +65,41 @@ Guidelines:
 2. If the answer isn't explicitly given in the information, refer to the conversation history if possible. Avoid making up answers and if no answer, reply to the user in kindness that you are not familiar with the concept.
 what to avoid
 PLEASE avoid stating statements like: Based on the context provided and the instructions you've given, or 'according to the context i have been given,...' 
+include Nutrient Analysis,Soil pH Assessment,Soil Health Enhancements,Crop-Specific Insights,Ongoing Monitoring
 `;
 const answerPrompt = PromptTemplate.fromTemplate(ANSWER_TEMPLATE);
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
+    const {
+        ph_level,
+        nitrogen,
+        phosphorus,
+        potassium,
+        organic_matter,
+        texture,
+        crop_planned,
+        convHistory,
+      } = body;
+  
+    //   if (
+    //     !ph_level ||
+    //     !nitrogen ||
+    //     !phosphorus ||
+    //     !potassium ||
+    //     !organic_matter ||
+    //     !texture ||
+    //     convHistory ||
+    //     !crop_planned
+    //   ) {
+    //     return new NextResponse("All fields are required");
+    //   }
+    // console.log(body)
     const messages = body.messages ?? [];
     const previousMessages = messages.slice(0, -1);
     const currentMessageContent = messages[messages.length - 1].content;
-// 
+
     const model = new ChatGroq({
       apiKey: process.env.GROQ_API_KEY,
     });
@@ -93,8 +118,8 @@ export async function POST(req: NextRequest) {
     });
     const vectorstore = new SupabaseVectorStore(embeddings, {
       client,
-      tableName: "coffee_documents",
-      queryName: "match_coffee_documents",
+      tableName: "documents",
+      queryName: "match_documents",
     });
 
    

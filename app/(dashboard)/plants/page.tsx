@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from "react";
-import { MultimodalInput } from "./_components/multi-input";
+import MultimodalInput  from "./_components/multi-input";
 import { Markdown } from "../_components/markdown";
 import { Empty } from "../_components/empty";
 import { Loader } from "../_components/loader";
