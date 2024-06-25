@@ -5,9 +5,9 @@ import Image from "next/image";
 
 export const ReportModal = () => {
   return (
-    <Dialog className="bg-[#fdf8e3]">
+    <Dialog>
       <DialogTrigger asChild>
-        <Button type="button" onClick={() => {}} siz="sm" className="m-3">
+        <Button type="button" onClick={() => {}} size="sm" className="m-3">
           Download report
         </Button>
       </DialogTrigger>
