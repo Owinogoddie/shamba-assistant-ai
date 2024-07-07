@@ -27,6 +27,13 @@ const tools = [
     bgColor: "text-emerald-500/10",
   },
   {
+    label: "Report",
+    icon: SearchCheckIcon,
+    href: "/report",
+    color: "text-emerald-500",
+    bgColor: "text-emerald-500/10",
+  },
+  {
     label: "Plant Disease detection",
     icon: Microscope,
     href: "/plants",

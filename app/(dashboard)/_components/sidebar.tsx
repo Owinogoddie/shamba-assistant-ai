@@ -39,6 +39,12 @@ const routes = [
     color: "text-pink-700",
   },
   {
+    label: "Analysis Report",
+    icon: SearchCheckIcon,
+    href: "/report",
+    color: "text-blue-700",
+  },
+  {
     label: "Plant Disease detection",
     icon: Microscope,
     href: "/plants",
