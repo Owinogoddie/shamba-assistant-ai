@@ -3,8 +3,9 @@ import { useEffect, useState } from "react";
 import ClientSideDownloadableReport from "./ClientSideDownloadableReport";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
-import { FarmForm } from "./_components/farm-form";
 import { FarmData, SoilAnalysisReportData } from "./lib/types";
+
+import ClientSideFarmForm from "./ClientSideFarmForm";
 
 const LoadingOverlay = () => (
   <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
@@ -166,7 +167,7 @@ const SoilAnalysisPage: React.FC = () => {
             Farm Report Generator
           </h1>
           <div className="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
-            <FarmForm onSubmit={handleSubmit} />
+            <ClientSideFarmForm onSubmit={handleSubmit} />
           </div>
           <Toaster />
         </div>
