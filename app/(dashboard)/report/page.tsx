@@ -23,6 +23,11 @@ const SoilAnalysisPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isClientReportReady, setIsClientReportReady] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     if (report) {
@@ -149,7 +154,9 @@ const SoilAnalysisPage: React.FC = () => {
       console.log("Report generation process completed");
     }
   };
-
+  if (!isMounted) {
+    return <div>Loading report...</div>;
+  }
   return (
     <div>
       {isLoading && <LoadingOverlay />}
