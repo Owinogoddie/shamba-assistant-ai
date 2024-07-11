@@ -1,21 +1,30 @@
-import React, { useRef } from 'react';
-import { useReactToPrint } from 'react-to-print';
-import { SoilAnalysisReportData } from './lib/types';
-import SoilAnalysisReport from './analysis-report';
+import React, { useEffect, useRef, useState } from "react";
+import { useReactToPrint } from "react-to-print";
+import { SoilAnalysisReportData } from "./lib/types";
+import SoilAnalysisReport from "./analysis-report";
 
 interface DownloadableReportProps {
   reportData: SoilAnalysisReportData;
 }
 
-const DownloadableReport: React.FC<DownloadableReportProps> = ({ reportData }) => {
+const DownloadableReport: React.FC<DownloadableReportProps> = ({
+  reportData,
+}) => {
+  const [isMounted, setIsMounted] = useState(false);
   const componentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
     documentTitle: `Soil_Analysis_Report_${reportData.farmInfo.name}`,
-    onAfterPrint: () => console.log('Printed successfully'),
+    onAfterPrint: () => console.log("Printed successfully"),
   });
-
+  if (!isMounted) {
+    return null;
+  }
   return (
     <div>
       <button
