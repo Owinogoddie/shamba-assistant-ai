@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import DownloadableReport from "./downloadable-report";
+import ClientSideDownloadableReport from "./ClientSideDownloadableReport";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { FarmForm } from "./_components/farm-form";
@@ -146,7 +146,7 @@ const SoilAnalysisPage: React.FC = () => {
           <h1 className="text-4xl font-bold text-green-800 mb-8">
             Soil Analysis Report
           </h1>
-          <DownloadableReport reportData={report} />
+          <ClientSideDownloadableReport reportData={report} />
           <Toaster />
         </div>
       )}
