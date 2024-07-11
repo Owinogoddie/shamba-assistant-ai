@@ -1,13 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ClientSideDownloadableReport from "./ClientSideDownloadableReport";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { FarmForm } from "./_components/farm-form";
-import {
-  FarmData,
-  SoilAnalysisReportData,
-} from "./lib/types";
+import { FarmData, SoilAnalysisReportData } from "./lib/types";
 
 const LoadingOverlay = () => (
   <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
@@ -25,6 +22,13 @@ const SoilAnalysisPage: React.FC = () => {
   const [report, setReport] = useState<SoilAnalysisReportData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isClientReportReady, setIsClientReportReady] = useState(false);
+
+  useEffect(() => {
+    if (report) {
+      setIsClientReportReady(true);
+    }
+  }, [report]);
 
   const handleSubmit = async (farmData: FarmData) => {
     setIsLoading(true);
@@ -35,9 +39,9 @@ const SoilAnalysisPage: React.FC = () => {
 
       // First, call the NPK predictor API
       console.log("Calling NPK predictor API...");
-      const npkResponse = await fetch('/api/report/npk-predictor', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const npkResponse = await fetch("/api/report/npk-predictor", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(farmData),
       });
       if (!npkResponse.ok) {
@@ -47,42 +51,60 @@ const SoilAnalysisPage: React.FC = () => {
       console.log("NPK predictor API response:", npkResult);
 
       // Then, call the other APIs in parallel
-      console.log("Calling pests, diseases, soil correction, and final report APIs...");
-      const [pestsResponse, diseasesResponse, soilCorrectionResponse, finalReportResponse] = await Promise.all([
-        fetch('/api/report/pests', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+      console.log(
+        "Calling pests, diseases, soil correction, and final report APIs..."
+      );
+      const [
+        pestsResponse,
+        diseasesResponse,
+        soilCorrectionResponse,
+        finalReportResponse,
+      ] = await Promise.all([
+        fetch("/api/report/pests", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ cropPlanned: farmData.cropName }),
         }),
-        fetch('/api/report/diseases', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        fetch("/api/report/diseases", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ cropPlanned: farmData.cropName }),
         }),
-        fetch('/api/report/soil-correction-plan', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        fetch("/api/report/soil-correction-plan", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ farmData, npkResult }),
         }),
-        fetch('/api/report/final-report', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        fetch("/api/report/final-report", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ farmData, npkResult }),
         }),
       ]);
 
-      if (!pestsResponse.ok || !diseasesResponse.ok || !soilCorrectionResponse.ok || !finalReportResponse.ok) {
+      if (
+        !pestsResponse.ok ||
+        !diseasesResponse.ok ||
+        !soilCorrectionResponse.ok ||
+        !finalReportResponse.ok
+      ) {
         throw new Error("One or more API calls failed");
       }
 
-      const [pestsData, diseasesData, soilCorrectionData, finalReportData] = await Promise.all([
-        pestsResponse.json(),
-        diseasesResponse.json(),
-        soilCorrectionResponse.json(),
-        finalReportResponse.json(),
-      ]);
+      const [pestsData, diseasesData, soilCorrectionData, finalReportData] =
+        await Promise.all([
+          pestsResponse.json(),
+          diseasesResponse.json(),
+          soilCorrectionResponse.json(),
+          finalReportResponse.json(),
+        ]);
 
-      console.log("API responses received:", { pestsData, diseasesData, soilCorrectionData, finalReportData });
+      console.log("API responses received:", {
+        pestsData,
+        diseasesData,
+        soilCorrectionData,
+        finalReportData,
+      });
 
       const newReport: SoilAnalysisReportData = {
         farmInfo: {
@@ -117,7 +139,9 @@ const SoilAnalysisPage: React.FC = () => {
       setError((err as Error).message);
       toast({
         title: "Error",
-        description: `An error occurred while generating the report: ${(err as Error).message}`,
+        description: `An error occurred while generating the report: ${
+          (err as Error).message
+        }`,
         variant: "destructive",
       });
     } finally {
@@ -146,7 +170,11 @@ const SoilAnalysisPage: React.FC = () => {
           <h1 className="text-4xl font-bold text-green-800 mb-8">
             Soil Analysis Report
           </h1>
-          <ClientSideDownloadableReport reportData={report} />
+          {isClientReportReady ? (
+            <ClientSideDownloadableReport reportData={report} />
+          ) : (
+            <p>Loading report...</p>
+          )}
           <Toaster />
         </div>
       )}
