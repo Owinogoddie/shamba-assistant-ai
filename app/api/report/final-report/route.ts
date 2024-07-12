@@ -19,7 +19,7 @@ export async function POST(request: Request) {
     - Organic Carbon: ${farmData.organicCarbon}%
     - pH: ${farmData.ph}
 
-    NPK Recommendation:
+    NPK Need:
     ${JSON.stringify(npkResult, null, 2)}
     
     Please provide a detailed analysis including:

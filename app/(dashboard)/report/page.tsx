@@ -43,7 +43,7 @@ const SoilAnalysisPage: React.FC = () => {
     try {
       console.log("Starting report generation...");
 
-      // First, call the NPK predictor API
+      // call to NPK predictor API
       console.log("Calling NPK predictor API...");
       const npkResponse = await fetch("/api/report/npk-predictor", {
         method: "POST",
@@ -56,7 +56,7 @@ const SoilAnalysisPage: React.FC = () => {
       const npkResult = await npkResponse.json();
       console.log("NPK predictor API response:", npkResult);
 
-      // Then, call the other APIs in parallel
+      // call to other APIs in parallel
       console.log(
         "Calling pests, diseases, soil correction, and final report APIs..."
       );
@@ -125,7 +125,7 @@ const SoilAnalysisPage: React.FC = () => {
           potassium: farmData.potassium,
           moisture: farmData.soilMoisture,
           carbon: farmData.organicCarbon,
-          temperature: 25, // You might want to get this from somewhere else
+          temperature: 0,
           ph: farmData.ph,
         },
         soilCorrectionPlan: soilCorrectionData.soilCorrectionPlan,

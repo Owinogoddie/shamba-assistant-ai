@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 import { SoilData, SoilAnalysisReportData } from "./lib/types";
 import ReactMarkdown from "react-markdown";
-import { nutrientRecommendations } from "./data";
 import Image from "next/image";
 
 const companyInfo = {
@@ -32,6 +31,7 @@ const SoilAnalysisReport: React.FC<SoilAnalysisReportData> = ({
   soilCorrectionPlan,
   pestControl,
   diseaseControl,
+  Nutrientrecommendation
 }) => {
   const createMappedData = (soilData: any) => {
     return [
@@ -62,7 +62,7 @@ const SoilAnalysisReport: React.FC<SoilAnalysisReportData> = ({
       },
       {
         label: "Organic Matter",
-        value: soilData.organicCarbon,
+        value: soilData.carbon,
         color: "green",
         icon: AlarmSmoke,
       },
@@ -75,6 +75,15 @@ const SoilAnalysisReport: React.FC<SoilAnalysisReportData> = ({
     ];
   };
   const MappedData = createMappedData(soilData);
+
+  function convertToNutrientRecommendations(data:any) {
+    return [
+      { name: "Nitrogen (N)", amount: data.nitrogen_need },
+      { name: "Phosphorus (P)", amount: data.phosphorus_need },
+      { name: "Potassium (K)", amount: data.potassium_need }
+    ];
+  }
+  const nutrientRecommendations = convertToNutrientRecommendations(Nutrientrecommendation);
   return (
     <div className="max-w-4xl mx-auto p-8 shadow-lg bg-white font-sans">
       {/* Main Heading */}
@@ -147,7 +156,7 @@ const SoilAnalysisReport: React.FC<SoilAnalysisReportData> = ({
           >
             <item.icon className={`mr-4 text-${item.color}-500 h-8 w-8`} />
             <div className="flex flex-col justify-center">
-              <p className={`text-xl font-bold text-${item.color}-600`}>
+              <p className={`text-xl text-right font-bold text-${item.color}-600`}>
                 {item.value}
               </p>
               <p className={`text-sm text-${item.color}-700`}>{item.label}</p>

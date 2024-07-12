@@ -33,8 +33,8 @@ export interface NPKRecommendation {
   n: number;
   p: number;
   k: number;
-  organic_matter: number;
-  lime: number;
+  // organic_matter: number;
+  // lime: number;
 }
 
 export interface Report {

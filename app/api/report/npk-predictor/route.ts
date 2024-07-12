@@ -6,7 +6,7 @@ export async function POST(request: Request) {
   
   try {
     const response = await axios.post(
-      "https://godfreyowino-npk-predictor.hf.space/predict",
+      "https://godfreyowino-npk-predictor-cc214d6.hf.space/predict",
       {
         crop_name: farmData.cropName,
         target_yield: farmData.targetYield,
@@ -19,7 +19,7 @@ export async function POST(request: Request) {
         soil_moisture: farmData.soilMoisture,
       }
     );
-console.log(response.data)
+// console.log(response.data)
     return NextResponse.json(response.data);
   } catch (error) {
     console.error('Error in NPK prediction:', error);

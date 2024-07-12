@@ -108,8 +108,6 @@ export const nutrientRecommendations = [
   { name: "Nitrogen (N)", amount: 1911.21 },
   { name: "Phosphorus (P)", amount: 2526.23 },
   { name: "Potassium (K)", amount: 232.30 },
-  { name: "Organic Matter", amount: 118983.63 },
-  { name: "Lime", amount: 18947.20 },
 ];
 
 export const soilCorrectionPlan= [

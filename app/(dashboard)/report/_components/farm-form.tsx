@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { CountySelect } from "./county-select";
 import { LocationSearch } from "./location-search";
+import { CropNameSearch } from "./crop-name-search";
 import { FarmData } from '../lib/types'
 
 interface FarmFormProps {
@@ -41,7 +42,9 @@ export function FarmForm({ onSubmit }: FarmFormProps) {
   const handleLocationSelect = useCallback((lat: number, lng: number, label: string) => {
     setFarmData((prev) => ({ ...prev, location: { lat, lng, label } }));
   }, []);
-
+  const handleCropNameSelect = useCallback((cropName: string) => {
+    setFarmData((prev) => ({ ...prev, cropName }));
+  }, []);
   const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(farmData);
@@ -68,6 +71,15 @@ export function FarmForm({ onSubmit }: FarmFormProps) {
                 <LocationSearch
                   value={farmData.location}
                   onChange={handleLocationSelect}
+                />
+              </div>
+            );
+          } else if (key === 'cropName') {
+            return (
+              <div key={key} className="md:col-span-2">
+                <CropNameSearch
+                  value={farmData.cropName}
+                  onChange={handleCropNameSelect}
                 />
               </div>
             );
