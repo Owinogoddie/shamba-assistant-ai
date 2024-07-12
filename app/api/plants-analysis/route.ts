@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { HumanMessage } from "@langchain/core/messages";
+import { corsResponse } from "../cors";
 
 interface RequestBody {
   imageBuffer: string;
@@ -32,19 +33,23 @@ export async function POST(req: NextRequest) {
         ],
       }),
     ];
-    
+
     const response = await vision.invoke(input);
 
     console.log(response.content);
 
     // Convert response.content to string
-    const responseContent = typeof response.content === 'string' 
-      ? response.content 
-      : JSON.stringify(response.content);
-
-    return new NextResponse(responseContent, { status: 200 });
+    const responseContent =
+      typeof response.content === "string"
+        ? response.content
+        : JSON.stringify(response.content);
+    return corsResponse(responseContent, 200);
   } catch (error: any) {
     console.log("ERROR_ON_MULTIMODAL", error.message);
-    return new NextResponse("Internal server error", { status: 500 });
+    return corsResponse("Internal server error", 500);
   }
+}
+
+export async function OPTIONS(req: NextRequest) {
+  return corsResponse(null, 200);
 }

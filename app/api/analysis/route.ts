@@ -8,12 +8,16 @@ import { PromptTemplate } from "@langchain/core/prompts";
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
 import { Document } from "@langchain/core/documents";
 import { RunnableSequence } from "@langchain/core/runnables";
-import { ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
+import {
+  ChatGoogleGenerativeAI,
+  GoogleGenerativeAIEmbeddings,
+} from "@langchain/google-genai";
 import { TaskType } from "@google/generative-ai";
 import {
   BytesOutputParser,
   StringOutputParser,
 } from "@langchain/core/output_parsers";
+import { corsHeaders } from "../cors";
 
 export const runtime = "edge";
 
@@ -44,7 +48,7 @@ const CONDENSE_QUESTION_TEMPLATE = `Given the following conversation and a follo
 Follow Up Input: {question}
 Standalone question:`;
 const condenseQuestionPrompt = PromptTemplate.fromTemplate(
-  CONDENSE_QUESTION_TEMPLATE,
+  CONDENSE_QUESTION_TEMPLATE
 );
 
 const ANSWER_TEMPLATE = `
@@ -73,16 +77,16 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const {
-        ph_level,
-        nitrogen,
-        phosphorus,
-        potassium,
-        organic_matter,
-        texture,
-        crop_planned,
-        convHistory,
-      } = body;
-  
+      ph_level,
+      nitrogen,
+      phosphorus,
+      potassium,
+      organic_matter,
+      texture,
+      crop_planned,
+      convHistory,
+    } = body;
+
     //   if (
     //     !ph_level ||
     //     !nitrogen ||
@@ -110,7 +114,7 @@ export async function POST(req: NextRequest) {
     // });
     const client = createClient(
       process.env.SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
     const embeddings = new GoogleGenerativeAIEmbeddings({
       model: "embedding-001", // 768 dimensions
@@ -122,7 +126,6 @@ export async function POST(req: NextRequest) {
       queryName: "match_documents",
     });
 
-   
     const standaloneQuestionChain = RunnableSequence.from([
       condenseQuestionPrompt,
       model,
@@ -184,14 +187,26 @@ export async function POST(req: NextRequest) {
     //     }),
     //   ),
     // ).toString("base64");
-
     return new StreamingTextResponse(stream, {
       headers: {
+        ...corsHeaders(),
         "x-message-index": (previousMessages.length + 1).toString(),
         // "x-sources": serializedSources,
       },
     });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: e.status ?? 500 });
+    // For error responses, we'll use NextResponse with CORS headers
+    return NextResponse.json(
+      { error: e.message },
+      {
+        status: e.status ?? 500,
+        headers: corsHeaders(),
+      }
+    );
   }
+}
+
+// Add OPTIONS method to handle preflight requests
+export async function OPTIONS(request: Request) {
+  return new Response(null, { headers: corsHeaders() });
 }

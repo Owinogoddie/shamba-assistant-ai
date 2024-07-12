@@ -4,7 +4,6 @@ import ClientSideDownloadableReport from "./ClientSideDownloadableReport";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { FarmData, SoilAnalysisReportData } from "./lib/types";
-
 import ClientSideFarmForm from "./ClientSideFarmForm";
 
 const LoadingOverlay = () => (
@@ -43,97 +42,18 @@ const SoilAnalysisPage: React.FC = () => {
     try {
       console.log("Starting report generation...");
 
-      // call to NPK predictor API
-      console.log("Calling NPK predictor API...");
-      const npkResponse = await fetch("/api/report/npk-predictor", {
+      const response = await fetch("/api/farm-report", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(farmData),
       });
-      if (!npkResponse.ok) {
-        throw new Error(`NPK predictor API error: ${npkResponse.statusText}`);
-      }
-      const npkResult = await npkResponse.json();
-      console.log("NPK predictor API response:", npkResult);
 
-      // call to other APIs in parallel
-      console.log(
-        "Calling pests, diseases, soil correction, and final report APIs..."
-      );
-      const [
-        pestsResponse,
-        diseasesResponse,
-        soilCorrectionResponse,
-        finalReportResponse,
-      ] = await Promise.all([
-        fetch("/api/report/pests", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ cropPlanned: farmData.cropName }),
-        }),
-        fetch("/api/report/diseases", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ cropPlanned: farmData.cropName }),
-        }),
-        fetch("/api/report/soil-correction-plan", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ farmData, npkResult }),
-        }),
-        fetch("/api/report/final-report", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ farmData, npkResult }),
-        }),
-      ]);
-
-      if (
-        !pestsResponse.ok ||
-        !diseasesResponse.ok ||
-        !soilCorrectionResponse.ok ||
-        !finalReportResponse.ok
-      ) {
-        throw new Error("One or more API calls failed");
+      if (!response.ok) {
+        throw new Error(`API error: ${response.statusText}`);
       }
 
-      const [pestsData, diseasesData, soilCorrectionData, finalReportData] =
-        await Promise.all([
-          pestsResponse.json(),
-          diseasesResponse.json(),
-          soilCorrectionResponse.json(),
-          finalReportResponse.json(),
-        ]);
-
-      console.log("API responses received:", {
-        pestsData,
-        diseasesData,
-        soilCorrectionData,
-        finalReportData,
-      });
-
-      const newReport: SoilAnalysisReportData = {
-        farmInfo: {
-          name: farmData.farmName,
-          owner: farmData.farmerName,
-          location: farmData.location.label,
-        },
-        Nutrientrecommendation: npkResult,
-        soilData: {
-          nitrogen: farmData.nitrogen,
-          phosphorus: farmData.phosphorus,
-          potassium: farmData.potassium,
-          moisture: farmData.soilMoisture,
-          carbon: farmData.organicCarbon,
-          temperature: 0,
-          ph: farmData.ph,
-        },
-        soilCorrectionPlan: soilCorrectionData.soilCorrectionPlan,
-        diseaseControl: diseasesData.diseases,
-        pestControl: pestsData.pests,
-        recommendations: finalReportData.reportContent,
-      };
-      setReport(newReport);
+      const reportData = await response.json();
+      setReport(reportData);
       console.log("Report set in state");
 
       toast({
@@ -155,9 +75,11 @@ const SoilAnalysisPage: React.FC = () => {
       console.log("Report generation process completed");
     }
   };
+
   if (!isMounted) {
     return <div>Loading report...</div>;
   }
+
   return (
     <div>
       {isLoading && <LoadingOverlay />}

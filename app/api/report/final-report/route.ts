@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { Groq } from "groq-sdk";
+import { corsResponse } from '../../cors';
 
 export async function POST(request: Request) {
   const { farmData, npkResult } = await request.json();
@@ -50,12 +51,16 @@ export async function POST(request: Request) {
 
     if (reportContent) {
       console.log({reportContent})
-      return NextResponse.json({ reportContent });
+      return corsResponse({ reportContent });
     } else {
       return NextResponse.json({ error: "Failed to generate report content" }, { status: 500 });
     }
   } catch (error) {
     console.error("Error generating final report:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return corsResponse({ error: "Internal server error" }, 500);
   }
+}
+
+export async function OPTIONS(request: Request) {
+  return corsResponse({});
 }

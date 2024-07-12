@@ -12,6 +12,8 @@ export interface FarmData {
   phosphorus: string;
   potassium: string;
   soilMoisture: string;
+  temperature: number;
+  soilConductivity?: any;
 }
 
 export interface FarmInput {
@@ -72,6 +74,7 @@ export interface SoilData {
   carbon: any;
   temperature: any;
   ph: any;
+  soilConductivity?:any;
 }
 
 export interface Recommendations {

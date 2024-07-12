@@ -7,6 +7,13 @@ import { HttpResponseOutputParser } from "langchain/output_parsers";
 import { ChatGroq } from "@langchain/groq";
 
 export const runtime = "edge";
+function corsHeaders() {
+  return {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  };
+}
 
 const formatMessage = (message: VercelChatMessage) => {
   return `${message.role}: ${message.content}`;
@@ -28,10 +35,9 @@ export async function POST(req: NextRequest) {
     const currentMessageContent = messages[messages.length - 1].content;
     const prompt = PromptTemplate.fromTemplate(TEMPLATE);
 
-     
     const model = new ChatGroq({
-        apiKey: process.env.GROQ_API_KEY,
-      });
+      apiKey: process.env.GROQ_API_KEY,
+    });
 
     /**
      * Chat models stream message chunks rather than bytes, so this
@@ -52,8 +58,15 @@ export async function POST(req: NextRequest) {
       input: currentMessageContent,
     });
 
-    return new StreamingTextResponse(stream);
+    return new StreamingTextResponse(stream, { headers: corsHeaders() });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: e.status ?? 500 });
+    return NextResponse.json(
+      { error: e.message },
+      { status: e.status ?? 500, headers: corsHeaders() }
+    );
   }
+}
+
+export async function OPTIONS(req: NextRequest) {
+  return new NextResponse(null, { headers: corsHeaders() });
 }

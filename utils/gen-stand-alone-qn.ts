@@ -3,7 +3,7 @@ import { StringOutputParser } from "@langchain/core/output_parsers";
 import { getLLM } from "./getLLM";
 import { ChatGroq } from "@langchain/groq";
 
-export const generateStandAloneQnChain = async (question: string) => {
+export const generateStandAloneQnChain = async () => {
   try {
     const llm: ChatGroq | undefined = getLLM();
     

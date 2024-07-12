@@ -1,7 +1,6 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { StringOutputParser } from "@langchain/core/output_parsers";
-
 import {
   RunnableSequence,
   RunnablePassthrough,
@@ -10,27 +9,37 @@ import { getLLM } from "@/utils/getLLM";
 import { cropSpecificPromptTemplate } from "@/utils/templates";
 import { generateStandAloneQnChain } from "@/utils/gen-stand-alone-qn";
 import { vectorRetriever } from "@/utils/vectorRetriever";
+import { corsResponse } from "../cors";
 
-export async function POST(req) {
+interface RequestBody {
+  messages: any[];
+  question: string;
+  crop: string;
+}
+
+export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    const body: RequestBody = await req.json();
     const { messages, question, crop } = body;
     console.log("CROP_CHOSEN 🌳🌳", crop);
 
     if (!messages) {
-      return new NextResponse("Messages are required");
+      return corsResponse({ error: "Messages are required" }, 400);
     }
     if (!question) {
-      return new NextResponse("Question is required");
+      return corsResponse({ error: "Question is required" }, 400);
     }
-
     if (!crop) {
-      return new NextResponse("No crop chosen");
+      return corsResponse({ error: "No crop chosen" }, 400);
     }
 
     const llm = getLLM();
 
-    const combineDocs = (docs) => {
+    if (!llm) {
+      return corsResponse({ error: "Messages are required" }, 400);
+    }
+
+    const combineDocs = (docs: any[]) => {
       return docs.map((doc) => doc.pageContent).join("\n\n");
     };
 
@@ -43,7 +52,7 @@ export async function POST(req) {
     const queryName = "match_coffee_documents";
     const retriever = await vectorRetriever(tableName, queryName);
     const retrieverChain = RunnableSequence.from([
-      (prevResult) => prevResult.standalone_question,
+      (prevResult: any) => prevResult.standalone_question,
       retriever,
       combineDocs,
     ]);
@@ -56,9 +65,9 @@ export async function POST(req) {
       },
       {
         documents: retrieverChain,
-        question: ({ original_input }) => original_input.question,
-        convHistory: ({ original_input }) => original_input.conv_history,
-        cropName: ({ original_input }) => original_input.cropName,
+        question: ({ original_input }: any) => original_input.question,
+        convHistory: ({ original_input }: any) => original_input.conv_history,
+        cropName: ({ original_input }: any) => original_input.cropName,
       },
       answerChain,
     ]);
@@ -68,18 +77,6 @@ export async function POST(req) {
       conv_history: [],
       cropName: crop,
     });
-    // convHistory.push(question);
-    // convHistory.push(response);
-
-    // console.log("HISTORY", convHistory);
-
-    // const jsonStructure = convertToStructuredJSON3(response);
-    // const jsonResponse = JSON.parse(response);
-    // console.log("MAIN_RESPONSE:", { response });
-    // const res=await retriever.invoke(question)
-    // console.log(JSON.stringify(jsonStructure, null, 2));
-
-    // console.log({ response });
 
     const resp = [
       {
@@ -91,11 +88,13 @@ export async function POST(req) {
         content: response,
       },
     ];
-    return NextResponse.json(resp);
-
-    // const res = response.lc_kwargs.content;
+    return corsResponse(resp);
   } catch (error) {
     console.log("[CONVERSATION_ERROR]", error);
-    return new NextResponse("Internal server error");
+    return corsResponse({ error: "Internal server error" }, 500);
   }
+}
+
+export async function OPTIONS(req: NextRequest) {
+  return corsResponse({});
 }

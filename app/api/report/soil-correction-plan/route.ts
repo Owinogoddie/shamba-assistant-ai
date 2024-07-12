@@ -1,5 +1,6 @@
-import { NextResponse } from 'next/server';
-import { Groq } from 'groq-sdk';
+import { NextResponse } from "next/server";
+import { Groq } from "groq-sdk";
+import { corsResponse } from "../../cors";
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,
@@ -68,34 +69,40 @@ IMPORTANT: Your entire response must be a valid JSON object. Do not include any 
 }
 `;
 
-try {
-  const completion = await groq.chat.completions.create({
-    messages: [{ role: "user", content: prompt }],
-    model: "mixtral-8x7b-32768",
-    temperature: 0.1,
-    max_tokens: 1500,
-  });
-
-  const responseContent = completion.choices[0]?.message?.content || '{}';
-  
-  // Try to parse the entire response as JSON
-  let result;
   try {
-    result = JSON.parse(responseContent);
-  } catch (parseError) {
-    // If parsing fails, try to extract JSON from the response
-    const jsonMatch = responseContent.match(/\{[\s\S]*\}/);
-    if (jsonMatch) {
-      result = JSON.parse(jsonMatch[0]);
-    } else {
-      throw new Error('Failed to extract valid JSON from the response');
-    }
-  }
+    const completion = await groq.chat.completions.create({
+      messages: [{ role: "user", content: prompt }],
+      model: "mixtral-8x7b-32768",
+      temperature: 0.1,
+      max_tokens: 1500,
+    });
 
-  console.log({result});
-  return NextResponse.json(result);
-} catch (error) {
-  console.error('Error in soil correction plan analysis:', error);
-  return NextResponse.json({ error: 'Failed to generate soil correction plan' }, { status: 500 });
+    const responseContent = completion.choices[0]?.message?.content || "{}";
+
+    // Try to parse the entire response as JSON
+    let result;
+    try {
+      result = JSON.parse(responseContent);
+    } catch (parseError) {
+      // If parsing fails, try to extract JSON from the response
+      const jsonMatch = responseContent.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        result = JSON.parse(jsonMatch[0]);
+      } else {
+        throw new Error("Failed to extract valid JSON from the response");
+      }
+    }
+    console.log({ result });
+    return corsResponse(result);
+  } catch (error) {
+    console.error("Error in soil correction plan analysis:", error);
+    return corsResponse(
+      { error: "Failed to generate soil correction plan" },
+      500
+    );
+  }
 }
+
+export async function OPTIONS(request: Request) {
+  return corsResponse({});
 }

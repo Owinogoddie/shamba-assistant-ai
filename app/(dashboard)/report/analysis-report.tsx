@@ -35,18 +35,33 @@ const SoilAnalysisReport: React.FC<SoilAnalysisReportData> = ({
 }) => {
   const createMappedData = (soilData: any) => {
     return [
+     
+      {
+        label: "pH",
+        value: soilData.ph,
+        color: "yellow",
+
+        icon: Droplets,
+      },
+      {
+        label: "Temp ",
+        value: soilData.temperature,
+        color: "blue",
+
+        icon: Thermometer,
+      },
+      {
+        label: "Conductivity",
+        value: soilData.soilConductivity,
+        color: "emerald",
+
+        icon: Droplets,
+      },
       {
         label: "Nitrogen (N)",
         value: soilData.nitrogen,
         color: "blue",
         icon: Droplets,
-      },
-      {
-        label: "Nitrogen (N)",
-        value: soilData.ph,
-        color: "yellow",
-
-        icon: Thermometer,
       },
       {
         label: "Phosphorus (P)",

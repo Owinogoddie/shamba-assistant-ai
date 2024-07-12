@@ -28,6 +28,8 @@ export function FarmForm({ onSubmit }: FarmFormProps) {
     phosphorus: "",
     potassium: "",
     soilMoisture: "",
+    temperature: 0,
+    soilConductivity: "",
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,9 +44,11 @@ export function FarmForm({ onSubmit }: FarmFormProps) {
   const handleLocationSelect = useCallback((lat: number, lng: number, label: string) => {
     setFarmData((prev) => ({ ...prev, location: { lat, lng, label } }));
   }, []);
+
   const handleCropNameSelect = useCallback((cropName: string) => {
     setFarmData((prev) => ({ ...prev, cropName }));
   }, []);
+
   const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(farmData);
@@ -83,6 +87,19 @@ export function FarmForm({ onSubmit }: FarmFormProps) {
                 />
               </div>
             );
+          } else if (key === 'soilConductivity') {
+            return (
+              <div key={key}>
+                <Label htmlFor={key}>Soil Conductivity</Label>
+                <Input
+                  id={key}
+                  name={key}
+                  type="number"
+                  value={farmData[key] as string}
+                  onChange={handleInputChange}
+                />
+              </div>
+            );
           } else {
             return (
               <div key={key}>
@@ -90,8 +107,10 @@ export function FarmForm({ onSubmit }: FarmFormProps) {
                 <Input
                   id={key}
                   name={key}
+                  type={key === 'temperature' ? 'number' : 'text'}
                   value={farmData[key as keyof FarmData] as string}
                   onChange={handleInputChange}
+                  required={key !== 'soilConductivity'}
                 />
               </div>
             );

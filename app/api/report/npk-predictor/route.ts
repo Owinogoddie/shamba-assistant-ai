@@ -1,9 +1,10 @@
-import { NextResponse } from 'next/server';
-import axios from 'axios';
+import { NextResponse } from "next/server";
+import axios from "axios";
+import { corsResponse } from "../../cors";
 
 export async function POST(request: Request) {
   const farmData = await request.json();
-  
+
   try {
     const response = await axios.post(
       "https://godfreyowino-npk-predictor-cc214d6.hf.space/predict",
@@ -19,10 +20,13 @@ export async function POST(request: Request) {
         soil_moisture: farmData.soilMoisture,
       }
     );
-// console.log(response.data)
-    return NextResponse.json(response.data);
+    // console.log(response.data)
+    return corsResponse(response.data);
   } catch (error) {
-    console.error('Error in NPK prediction:', error);
-    return NextResponse.json({ error: 'Failed to predict NPK needs' }, { status: 500 });
+    console.error("Error in NPK prediction:", error);
+    return corsResponse({ error: "Failed to predict NPK needs" }, 500);
   }
+}
+export async function OPTIONS(request: Request) {
+  return corsResponse({});
 }

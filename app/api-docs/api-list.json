@@ -1,0 +1,748 @@
+[
+  {
+    "id": "farm-report",
+    "title": "Farm Report Generator",
+    "shortDescription": "Generate a comprehensive farm report including soil analysis, pest and disease information, and recommendations.",
+    "endpoint": "/api/farm-report",
+    "method": "POST",
+    "description": "This endpoint generates a complete farm report based on the provided farm data. It includes NPK predictions, pest and disease information, soil correction plans, and final recommendations. The endpoint internally calls multiple specialized APIs to gather all necessary information.",
+    "requestBody": {
+      "farmerName": "string",
+      "farmName": "string",
+      "county": "string",
+      "location": {
+        "lat": "number",
+        "lng": "number",
+        "label": "string"
+      },
+      "cropName": "string",
+      "fieldSize": "number",
+      "targetYield": "string",
+      "ph": "string",
+      "organicCarbon": "string",
+      "nitrogen": "string",
+      "phosphorus": "string",
+      "potassium": "string",
+      "soilMoisture": "string",
+      "temperature": "number",
+      "soilConductivity": "any"
+    },
+    "responseBody": {
+      "farmInfo": {
+        "name": "string",
+        "owner": "string",
+        "location": "string",
+        "county": "string",
+        "fieldSize": "number",
+        "targetYield": "string"
+      },
+      "Nutrientrecommendation": {
+        "N": "number",
+        "P": "number",
+        "K": "number"
+      },
+      "soilData": {
+        "nitrogen": "string",
+        "phosphorus": "string",
+        "potassium": "string",
+        "moisture": "string",
+        "carbon": "string",
+        "temperature": "number",
+        "ph": "string",
+        "conductivity": "any"
+      },
+      "soilCorrectionPlan": [
+        {
+          "timing": "string",
+          "instructions": "string",
+          "bestOption": "string",
+          "firstAlternative": "string",
+          "secondAlternative": "string"
+        }
+      ],
+      "diseaseControl": [
+        {
+          "name": "string",
+          "prevention": "string",
+          "chemicalControl": "string",
+          "modeOfApplication": "string",
+          "rateOfApplication": "string"
+        }
+      ],
+      "pestControl": [
+        {
+          "name": "string",
+          "prevention": "string",
+          "chemicalControl": "string",
+          "modeOfApplication": "string",
+          "rateOfApplication": "string"
+        }
+      ],
+      "recommendations": "string"
+    },
+    "exampleRequest": {
+      "farmerName": "John Doe",
+      "farmName": "Green Acres",
+      "county": "Nairobi",
+      "location": {
+        "lat": -1.2921,
+        "lng": 36.8219,
+        "label": "Nairobi, Kenya"
+      },
+      "cropName": "maize",
+      "fieldSize": 10,
+      "targetYield": "5 tons/ha",
+      "ph": "6.5",
+      "organicCarbon": "1.5",
+      "nitrogen": "40",
+      "phosphorus": "50",
+      "potassium": "30",
+      "soilMoisture": "30",
+      "temperature": 25,
+      "soilConductivity": 0.5
+    },
+    "exampleResponse": {
+      "farmInfo": {
+        "name": "Green Acres",
+        "owner": "John Doe",
+        "location": "Nairobi, Kenya",
+        "county": "Nairobi",
+        "fieldSize": 10,
+        "targetYield": "5 tons/ha"
+      },
+      "Nutrientrecommendation": {
+        "N": 60,
+        "P": 40,
+        "K": 40
+      },
+      "soilData": {
+        "nitrogen": "40",
+        "phosphorus": "50",
+        "potassium": "30",
+        "moisture": "30",
+        "carbon": "1.5",
+        "temperature": 25,
+        "ph": "6.5",
+        "conductivity": 0.5
+      },
+      "soilCorrectionPlan": [
+        {
+          "timing": "Before planting",
+          "instructions": "Apply nitrogen and potassium fertilizers to correct soil nutrient levels.",
+          "bestOption": "Apply 20 kg/ha of nitrogen and 10 kg/ha of potassium fertilizer.",
+          "firstAlternative": "Use a balanced NPK fertilizer with higher N and K content.",
+          "secondAlternative": "Apply organic compost rich in nitrogen and potassium."
+        },
+        {
+          "timing": "At planting",
+          "instructions": "Incorporate starter fertilizer into the soil.",
+          "bestOption": "Apply 10 kg/ha of phosphorus fertilizer in the planting holes.",
+          "firstAlternative": "Use a balanced NPK fertilizer with higher P content.",
+          "secondAlternative": "Apply bone meal as an organic phosphorus source."
+        },
+        {
+          "timing": "6 weeks after planting",
+          "instructions": "Side-dress with nitrogen fertilizer.",
+          "bestOption": "Apply 30 kg/ha of nitrogen fertilizer along the plant rows.",
+          "firstAlternative": "Use urea as a nitrogen source, applied 10 cm away from the plant base.",
+          "secondAlternative": "Apply liquid nitrogen fertilizer through fertigation if irrigation is available."
+        }
+      ],
+      "diseaseControl": [
+        {
+          "name": "Maize Streak Virus",
+          "prevention": "Use resistant varieties and control insect vectors",
+          "chemicalControl": "No effective chemical control",
+          "modeOfApplication": "N/A",
+          "rateOfApplication": "N/A"
+        },
+        {
+          "name": "Gray Leaf Spot",
+          "prevention": "Crop rotation and residue management",
+          "chemicalControl": "Azoxystrobin or pyraclostrobin",
+          "modeOfApplication": "Foliar spray",
+          "rateOfApplication": "0.5-1 L/ha"
+        }
+      ],
+      "pestControl": [
+        {
+          "name": "Fall Armyworm",
+          "prevention": "Early planting and crop rotation",
+          "chemicalControl": "Spinetoram",
+          "modeOfApplication": "Foliar spray",
+          "rateOfApplication": "150-200 ml/ha"
+        },
+        {
+          "name": "Stem Borer",
+          "prevention": "Use of push-pull technology",
+          "chemicalControl": "Chlorpyrifos",
+          "modeOfApplication": "Granular application in plant whorl",
+          "rateOfApplication": "8-10 kg/ha"
+        }
+      ],
+      "recommendations": "Based on the soil analysis and crop requirements for maize, we recommend the following:\n1. Follow the soil correction plan for optimal nutrient management.\n2. Monitor soil moisture closely, especially during critical growth stages.\n3. Implement crop rotation with legumes to improve soil nitrogen content naturally.\n4. Use resistant maize varieties to combat Maize Streak Virus.\n5. Practice good field hygiene and residue management to prevent Gray Leaf Spot.\n6. Implement Integrated Pest Management (IPM) strategies for Fall Armyworm and Stem Borer control.\n7. Consider soil pH management to maintain the current favorable level for maize growth."
+    },
+    "errors": [
+      {
+        "code": 500,
+        "message": "Failed to generate farm report",
+        "description": "This error occurs when there's an internal server error or when one or more of the internal API calls fail."
+      }
+    ]
+  },
+  {
+    "id": "agriculture-conversation",
+    "title": "Agricultural Conversation",
+    "shortDescription": "Engage in a conversation about agricultural topics.",
+    "endpoint": "/api/conversation",
+    "method": "POST",
+    "description": "This endpoint allows users to engage in a conversation about various agricultural topics, providing expert responses based on the input and conversation history.",
+    "requestBody": {
+      "messages": "array",
+      "input": "string"
+    },
+    "responseBody": [
+      {
+        "role": "string",
+        "content": "string"
+      }
+    ],
+    "exampleRequest": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "What are sustainable farming practices?"
+        }
+      ],
+      "input": "What are sustainable farming practices?"
+    },
+    "exampleResponse": [
+      {
+        "role": "user",
+        "content": "What are sustainable farming practices?"
+      },
+      {
+        "role": "ai",
+        "content": "Sustainable farming practices are methods that aim to meet current agricultural needs without compromising the ability of future generations to meet their own needs. Some key sustainable farming practices include:\n\n1. Crop rotation\n2. Integrated pest management\n3. Conservation tillage\n4. Cover cropping\n5. Efficient water management\n6. Agroforestry\n7. Organic farming methods\n8. Precision agriculture\n9. Composting and natural fertilizers\n10. Biodiversity conservation\n\nThese practices help maintain soil health, reduce environmental impact, conserve resources, and promote long-term agricultural productivity."
+      }
+    ],
+    "errors": [
+      {
+        "code": 400,
+        "message": "Bad Request",
+        "description": "This error occurs when the request is missing required parameters. Specifically, 'messages' and 'input' are required in the request body."
+      },
+      {
+        "code": 500,
+        "message": "Internal server error",
+        "description": "This error occurs when there's an unexpected error during the conversation processing."
+      }
+    ]
+  },
+  {
+    "id": "crop-specific-conversation",
+    "title": "Crop-Specific Conversation",
+    "shortDescription": "Get crop-specific information and advice through a conversational interface.",
+    "endpoint": "/api/cropSpecificConv",
+    "method": "POST",
+    "description": "This endpoint provides crop-specific information and advice through a conversational interface, utilizing a vector database for accurate and relevant responses.",
+    "requestBody": {
+      "messages": "array",
+      "question": "string",
+      "crop": "string"
+    },
+    "responseBody": [
+      {
+        "role": "string",
+        "content": "string"
+      }
+    ],
+    "exampleRequest": {
+      "messages": [],
+      "question": "What are the ideal growing conditions for coffee?",
+      "crop": "coffee"
+    },
+    "exampleResponse": [
+      {
+        "role": "user",
+        "content": "What are the ideal growing conditions for coffee?"
+      },
+      {
+        "role": "ai",
+        "content": "The ideal growing conditions for coffee, particularly for Arabica coffee which is the most widely cultivated species, are:\n\n1. Climate: Coffee thrives in tropical and subtropical climates.\n\n2. Temperature: Optimal range is between 60°F to 70°F (15°C to 21°C). Coffee plants are sensitive to frost and extreme heat.\n\n3. Altitude: Arabica coffee grows best at altitudes between 3,000 to 6,000 feet (900 to 1,800 meters) above sea level.\n\n4. Rainfall: Coffee requires about 60 to 80 inches (1,500 to 2,000 mm) of rainfall per year, ideally with a short dry season.\n\n5. Soil: Well-draining, slightly acidic soil with a pH between 6.0 to 6.5 is ideal. Rich in organic matter is preferable.\n\n6. Shade: Partial shade, especially in lower altitudes, can improve coffee quality and protect plants from extreme temperatures.\n\n7. Humidity: Moderate to high humidity is beneficial for coffee plants.\n\n8. Wind protection: Coffee plants prefer areas protected from strong winds.\n\nThese conditions allow coffee plants to develop properly, produce high-quality beans, and achieve optimal flavor profiles. It's important to note that slight variations in these conditions can significantly affect the taste and quality of the coffee produced."
+      }
+    ],
+    "errors": [
+      {
+        "code": 400,
+        "message": "Bad Request",
+        "description": "This error occurs when the request is missing required parameters. 'messages', 'question', and 'crop' are required in the request body."
+      },
+      {
+        "code": 400,
+        "message": "LLM Initialization Error",
+        "description": "This error occurs when there's a problem initializing the language model."
+      },
+      {
+        "code": 500,
+        "message": "Internal server error",
+        "description": "This error occurs when there's an unexpected error during the crop-specific conversation processing."
+      }
+    ]
+  },
+  {
+    "id": "coffee-chat",
+    "title": "Coffee Farming Chat",
+    "shortDescription": "Get expert advice on coffee farming through a conversational interface.",
+    "endpoint": "/api/chat",
+    "method": "POST",
+    "description": "This endpoint provides a conversational interface for users to ask questions and receive expert advice on coffee farming.",
+    "streaming": true,
+    "requestBody": {
+      "messages": "array",
+      "content": "string"
+    },
+    "responseBody": {
+      "role": "string",
+      "content": "string"
+    },
+    "exampleRequest": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "What are the best conditions for growing Arabica coffee?"
+        }
+      ],
+      "content": "What are the best conditions for growing Arabica coffee?"
+    },
+    "exampleResponse": [
+      {
+        "role": "user",
+        "content": "What are the best conditions for growing Arabica coffee?"
+      },
+      {
+        "role": "ai",
+        "content": "Arabica coffee thrives best under the following conditions:\n\n1. Altitude: 3,000-6,000 feet above sea level\n2. Temperature: 60-70°F (15-21°C)\n3. Rainfall: 60-80 inches annually, well-distributed\n4. Soil: Well-draining, slightly acidic (pH 6.0-6.5)\n5. Shade: Partial shade, especially in lower altitudes\n6. Humidity: Moderate to high\n\nThese conditions provide the ideal environment for Arabica coffee plants to produce high-quality beans with complex flavors and aromas."
+      }
+    ],
+    "errors": [
+      {
+        "code": 400,
+        "message": "Bad Request",
+        "description": "This error occurs when the request is malformed or missing required parameters."
+      },
+      {
+        "code": 500,
+        "message": "Failed to process chat request",
+        "description": "This error occurs when there's an internal server error or when the chat processing fails."
+      }
+    ]
+  },
+  {
+    "id": "soil-analysis",
+    "title": "Soil Analysis",
+    "shortDescription": "Analyze soil test results and provide agricultural recommendations.",
+    "endpoint": "/api/analysis",
+    "method": "POST",
+    "description": "This endpoint analyzes soil test results and provides comprehensive recommendations for soil health improvement and crop yield enhancement.",
+    "streaming": true,
+    "requestBody": {
+      "ph_level": "number",
+      "nitrogen": "number",
+      "phosphorus": "number",
+      "potassium": "number",
+      "organic_matter": "number",
+      "texture": "string",
+      "crop_planned": "string",
+      "convHistory": "array",
+      "messages": "array"
+    },
+    "responseBody": {
+      "content": "string"
+    },
+    "exampleRequest": {
+      "ph_level": 6.5,
+      "nitrogen": 20,
+      "phosphorus": 15,
+      "potassium": 25,
+      "organic_matter": 3.5,
+      "texture": "loamy",
+      "crop_planned": "maize",
+      "convHistory": [],
+      "messages": [
+        {
+          "role": "user",
+          "content": "Analyze my soil test results"
+        }
+      ]
+    },
+    "exampleResponse": {
+      "content": "Based on your soil test results, here's a comprehensive analysis:\n\n1. Nutrient Analysis:\n   - Nitrogen: 20 ppm (Moderate)\n   - Phosphorus: 15 ppm (Low)\n   - Potassium: 25 ppm (Moderate)\n\n2. Soil pH Assessment:\n   - pH level: 6.5 (Slightly acidic, ideal for most crops)\n\n3. Soil Health Enhancements:\n   - Organic matter: 3.5% (Good, but can be improved)\n   - Texture: Loamy (Excellent for most crops)\n\n4. Crop-Specific Insights (Maize):\n   - Phosphorus levels are low for optimal maize growth. Consider applying phosphorus fertilizer.\n   - The slightly acidic pH is suitable for maize.\n\n5. Recommendations:\n   - Apply phosphorus fertilizer to improve soil phosphorus levels.\n   - Maintain current organic matter levels through crop rotation and cover cropping.\n   - Monitor nitrogen levels during the growing season and apply as needed.\n\n6. Ongoing Monitoring:\n   - Conduct soil tests annually to track nutrient levels and pH changes.\n   - Adjust fertilizer application based on crop uptake and soil test results."
+    },
+    "errors": [
+      {
+        "code": 400,
+        "message": "Bad Request",
+        "description": "This error occurs when the request is malformed or missing required parameters."
+      },
+      {
+        "code": 500,
+        "message": "Failed to generate analysis",
+        "description": "This error occurs when there's an internal server error or when the analysis process fails."
+      }
+    ]
+  },
+  {
+    "id": "general-crops-chat",
+    "title": "General Crops Chat",
+    "shortDescription": "Get information about various crops through a conversational interface.",
+    "streaming": true,
+    "endpoint": "/api/general-crops",
+    "method": "POST",
+    "description": "This endpoint provides a conversational interface for users to ask questions and receive information about various crops and general agricultural topics.",
+    "requestBody": {
+      "messages": "array"
+    },
+    "responseBody": {
+      "content": "string"
+    },
+    "exampleRequest": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "What are the main types of grains grown worldwide?"
+        }
+      ]
+    },
+    "exampleResponse": {
+      "content": "The main types of grains grown worldwide include:\n\n1. Wheat: The most widely cultivated grain, used for bread, pasta, and many other food products.\n\n2. Rice: A staple food for over half of the world's population, especially in Asia.\n\n3. Corn (Maize): Widely used for human consumption, animal feed, and industrial products.\n\n4. Barley: Often used in brewing and animal feed.\n\n5. Oats: Popular in cereals and as livestock feed.\n\n6. Sorghum: Important in Africa and parts of Asia, used for food and animal feed.\n\n7. Millet: A group of small-seeded grasses, important in arid regions.\n\n8. Rye: Common in cooler climates, used for bread and whiskey production.\n\n9. Quinoa: A pseudo-grain known for its high protein content.\n\n10. Teff: An important grain in Ethiopia and Eritrea.\n\nThese grains are cultivated in various regions depending on climate, soil conditions, and cultural preferences."
+    },
+    "errors": [
+      {
+        "code": 500,
+        "message": "Internal server error",
+        "description": "This error occurs when there's an unexpected error during the processing of the general crops request."
+      }
+    ]
+  },
+  {
+    "id": "disease-report",
+    "title": "Disease Report",
+    "shortDescription": "Get information about potential diseases for a specific crop.",
+    "endpoint": "/api/report/diseases",
+    "method": "POST",
+    "description": "This endpoint provides detailed information about potential diseases for a specified crop, including prevention methods and chemical control options.",
+    "requestBody": {
+      "cropPlanned": "string"
+    },
+    "responseBody": {
+      "diseases": [
+        {
+          "name": "string",
+          "prevention": "string",
+          "chemicalControl": "string",
+          "modeOfApplication": "string",
+          "rateOfApplication": "string"
+        }
+      ]
+    },
+    "exampleRequest": {
+      "cropPlanned": "maize"
+    },
+    "exampleResponse": {
+      "diseases": [
+        {
+          "name": "Maize Streak Virus",
+          "prevention": "Use resistant varieties and control insect vectors",
+          "chemicalControl": "No effective chemical control",
+          "modeOfApplication": "N/A",
+          "rateOfApplication": "N/A"
+        }
+      ]
+    },
+    "errors": [
+      {
+        "code": 500,
+        "message": "Failed to fetch maize data",
+        "description": "This error occurs when there's an issue retrieving maize-specific disease data."
+      },
+      {
+        "code": 500,
+        "message": "Failed to analyze disease data",
+        "description": "This error occurs when there's an issue analyzing disease data for non-maize crops using the AI model."
+      }
+    ]
+  },
+  {
+    "id": "npk-predictor",
+    "title": "NPK Predictor",
+    "shortDescription": "Predict NPK needs based on farm data.",
+    "endpoint": "/api/report/npk-predictor",
+    "method": "POST",
+    "description": "This endpoint predicts the NPK (Nitrogen, Phosphorus, Potassium) needs for a crop based on provided farm data.",
+    "requestBody": {
+      "cropName": "string",
+      "targetYield": "number",
+      "fieldSize": "number",
+      "ph": "number",
+      "organicCarbon": "number",
+      "nitrogen": "number",
+      "phosphorus": "number",
+      "potassium": "number",
+      "soilMoisture": "number"
+    },
+    "responseBody": {
+      "nitrogen_need": "number",
+      "phosphorus_need": "number",
+      "potassium_need": "number"
+    },
+    "exampleRequest": {
+      "cropName": "maize",
+      "targetYield": 5000,
+      "fieldSize": 1,
+      "ph": 6.5,
+      "organicCarbon": 1.2,
+      "nitrogen": 20,
+      "phosphorus": 15,
+      "potassium": 25,
+      "soilMoisture": 60
+    },
+    "exampleResponse": {
+      "nitrogen_need": 120,
+      "phosphorus_need": 60,
+      "potassium_need": 40
+    },
+    "errors": [
+      {
+        "code": 500,
+        "message": "Failed to predict NPK needs",
+        "description": "This error occurs when there's an issue with the external NPK prediction service or processing the prediction results."
+      }
+    ]
+  },
+  {
+    "id": "final-report",
+    "title": "Final Report",
+    "shortDescription": "Generate a comprehensive farm report based on farm data and NPK results.",
+    "endpoint": "/api/report/final-report",
+    "method": "POST",
+    "description": "This endpoint generates a comprehensive farm report using the provided farm data and NPK results.",
+    "requestBody": {
+      "farmData": {
+        "farmName": "string",
+        "farmerName": "string",
+        "location": {
+          "label": "string"
+        },
+        "cropName": "string",
+        "nitrogen": "number",
+        "phosphorus": "number",
+        "potassium": "number",
+        "soilMoisture": "number",
+        "organicCarbon": "number",
+        "ph": "number"
+      },
+      "npkResult": {
+        "nitrogen_need": "number",
+        "phosphorus_need": "number",
+        "potassium_need": "number"
+      }
+    },
+    "responseBody": {
+      "reportContent": "string"
+    },
+    "exampleRequest": {
+      "farmData": {
+        "farmName": "Green Acres",
+        "farmerName": "John Doe",
+        "location": {
+          "label": "Nairobi, Kenya"
+        },
+        "cropName": "maize",
+        "nitrogen": 20,
+        "phosphorus": 15,
+        "potassium": 25,
+        "soilMoisture": 60,
+        "organicCarbon": 1.2,
+        "ph": 6.5
+      },
+      "npkResult": {
+        "nitrogen_need": 120,
+        "phosphorus_need": 60,
+        "potassium_need": 40
+      }
+    },
+    "exampleResponse": {
+      "reportContent": "Detailed farm report content..."
+    },
+    "errors": [
+      {
+        "code": 500,
+        "message": "Failed to generate report content",
+        "description": "This error occurs when the AI model fails to generate the final report content."
+      },
+      {
+        "code": 500,
+        "message": "Internal server error",
+        "description": "This error occurs when there's an unexpected error during the final report generation process."
+      }
+    ]
+  },
+  {
+    "id": "pest-report",
+    "title": "Pest Report",
+    "shortDescription": "Get information about potential pests for a specific crop.",
+    "endpoint": "/api/report/pests",
+    "method": "POST",
+    "description": "This endpoint provides detailed information about potential pests for a specified crop, including prevention methods and chemical control options.",
+    "requestBody": {
+      "cropPlanned": "string"
+    },
+    "responseBody": {
+      "pests": [
+        {
+          "name": "string",
+          "prevention": "string",
+          "chemicalControl": "string",
+          "modeOfApplication": "string",
+          "rateOfApplication": "string"
+        }
+      ]
+    },
+    "exampleRequest": {
+      "cropPlanned": "tomato"
+    },
+    "exampleResponse": {
+      "pests": [
+        {
+          "name": "Tomato Hornworm",
+          "prevention": "Crop rotation, handpicking",
+          "chemicalControl": "Bacillus thuringiensis (Bt)",
+          "modeOfApplication": "Foliar spray",
+          "rateOfApplication": "1-2 tsp per gallon of water"
+        }
+      ]
+    },
+    "errors": [
+      {
+        "code": 500,
+        "message": "Failed to fetch maize data",
+        "description": "This error occurs when there's an issue retrieving maize-specific pest data."
+      },
+      {
+        "code": 500,
+        "message": "Failed to analyze pest data",
+        "description": "This error occurs when there's an issue analyzing pest data for non-maize crops using the AI model."
+      }
+    ]
+  },
+  {
+    "id": "soil-correction-plan",
+    "title": "Soil Correction Plan",
+    "shortDescription": "Generate a soil correction plan based on farm data and NPK results.",
+    "endpoint": "/api/report/soil-correction-plan",
+    "method": "POST",
+    "description": "This endpoint generates a detailed soil correction plan based on the provided farm data and NPK results.",
+    "requestBody": {
+      "farmData": {
+        "cropName": "string",
+        "targetYield": "number",
+        "fieldSize": "number",
+        "ph": "number",
+        "organicCarbon": "number",
+        "nitrogen": "number",
+        "phosphorus": "number",
+        "potassium": "number",
+        "soilMoisture": "number"
+      },
+      "npkResult": {
+        "nitrogen_need": "number",
+        "phosphorus_need": "number",
+        "potassium_need": "number"
+      }
+    },
+    "responseBody": {
+      "soilCorrectionPlan": [
+        {
+          "timing": "string",
+          "instructions": "string",
+          "bestOption": "string",
+          "firstAlternative": "string",
+          "secondAlternative": "string"
+        }
+      ]
+    },
+    "exampleRequest": {
+      "farmData": {
+        "cropName": "maize",
+        "targetYield": 5000,
+        "fieldSize": 1,
+        "ph": 6.5,
+        "organicCarbon": 1.2,
+        "nitrogen": 20,
+        "phosphorus": 15,
+        "potassium": 25,
+        "soilMoisture": 60
+      },
+      "npkResult": {
+        "nitrogen_need": 120,
+        "phosphorus_need": 60,
+        "potassium_need": 40
+      }
+    },
+    "exampleResponse": {
+      "soilCorrectionPlan": [
+        {
+          "timing": "Before planting",
+          "instructions": "Apply base fertilizer and adjust soil pH",
+          "bestOption": "Apply 100 kg/ha of NPK 17-17-17",
+          "firstAlternative": "Apply 80 kg/ha of DAP",
+          "secondAlternative": "Apply 90 kg/ha of NPK 15-15-15"
+        },
+        {
+          "timing": "6 weeks after planting",
+          "instructions": "Apply top dressing fertilizer",
+          "bestOption": "Apply 100 kg/ha of Urea",
+          "firstAlternative": "Apply 120 kg/ha of CAN",
+          "secondAlternative": "Apply 90 kg/ha of Ammonium Sulfate"
+        }
+      ]
+    },
+    "errors": [
+      {
+        "code": 500,
+        "message": "Failed to generate soil correction plan",
+        "description": "This error occurs when there's an issue generating the soil correction plan using the AI model or processing the results."
+      }
+    ]
+  },
+  {
+    "id": "plant-analysis",
+    "title": "Plant Analysis",
+    "shortDescription": "Analyze plant images for diseases and provide recommendations.",
+    "endpoint": "/api/plant-analysis",
+    "method": "POST",
+    "description": "This endpoint analyzes plant images for diseases and provides detailed recommendations based on the analysis.",
+    "requestBody": {
+      "imageBuffer": "string (base64 encoded image)",
+      "text": "string (optional)"
+    },
+    "responseBody": {
+      "analysisResult": "string (formatted analysis result)"
+    },
+    "exampleRequest": {
+      "imageBuffer": "base64_encoded_image_data_here",
+      "text": "Please analyze this maize plant for any diseases"
+    },
+    "exampleResponse": {
+      "analysisResult": "**Introduction**\nThe image shows a maize plant with visible signs of disease.\n\n**Disease Name**\nNorthern Corn Leaf Blight (NCLB)\n\n**Description**\nLong, elliptical, grayish-green to tan lesions on the leaves.\n\n**Causes**\nCaused by the fungus Exserohilum turcicum.\n\n**Prevention**\n1. Plant resistant hybrids\n2. Practice crop rotation\n3. Remove and destroy crop debris\n\n**Cure**\n1. Apply fungicides such as azoxystrobin or pyraclostrobin\n2. Timing is critical - apply at first sign of disease\n3. Follow label instructions for application rates and frequency"
+    },
+    "errors": [
+      {
+        "code": 500,
+        "message": "Internal server error",
+        "description": "This error occurs when there's an unexpected error during the plant analysis process, such as issues with image processing or AI model invocation."
+      }
+    ]
+  }
+]

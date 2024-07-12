@@ -14,6 +14,7 @@ import {
   BytesOutputParser,
   StringOutputParser,
 } from "@langchain/core/output_parsers";
+import { corsHeaders } from "../cors";
 
 export const runtime = "edge";
 
@@ -159,14 +160,24 @@ export async function POST(req: NextRequest) {
     //     }),
     //   ),
     // ).toString("base64");
-
     return new StreamingTextResponse(stream, {
       headers: {
+        ...corsHeaders(),
         "x-message-index": (previousMessages.length + 1).toString(),
         // "x-sources": serializedSources,
       },
     });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: e.status ?? 500 });
+    return NextResponse.json(
+      { error: e.message },
+      { 
+        status: e.status ?? 500,
+        headers: corsHeaders()
+      }
+    );
   }
+}
+
+export async function OPTIONS(request: Request) {
+  return new Response(null, { headers: corsHeaders() });
 }

@@ -27,4 +27,30 @@ export interface FarmInput {
     date: string;
     consultant: string;
   }
+  export interface SoilAnalysisReportData {
+    Nutrientrecommendation:NPKRecommendation;
+    farmInfo: FarmInfo;
+    soilData: SoilData;
+    recommendations: any;
+    soilCorrectionPlan:soilCorrectionPlan[]
+    pestControl:any
+    diseaseControl:any
+  }
   
+  export interface FarmData {
+    farmerName: string;
+    farmName: string;
+    county: string;
+    location: { lat: number; lng: number; label: string };
+    cropName: string;
+    fieldSize: number;
+    targetYield: string;
+    ph: string;
+    organicCarbon: string;
+    nitrogen: string;
+    phosphorus: string;
+    potassium: string;
+    soilMoisture: string;
+    temperature: number;
+    soilConductivity?: any;
+  }

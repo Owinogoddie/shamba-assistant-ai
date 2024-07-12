@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { Groq } from "groq-sdk";
+import { corsResponse } from "../../cors";
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,
@@ -39,131 +40,129 @@ interface MaizeData {
 }
 
 const maizeData: MaizeData = {
-  "plant_name": "MAIZE",
-  "pests": [
+  plant_name: "MAIZE",
+  pests: [
     {
-      "name": "Fall Army worm",
-        "signs": "Attacks at seedling, vegetative, flowering and fruiting stage",
-        "prevention": "No prevention",
-        "chemicals": [
-          {
-            "name": "Occasion star 200sc",
-            "active_ingredient": "Emamectin benzoate 40g/l",
-            "application": "Foliar spray",
-            "dosage": "3ml/20l"
-          },
-          {
-            "name": "Escort 50 EC",
-            "active_ingredient": "Indoxacarb 160g/l",
-            "application": "Foliar spray",
-            "dosage": "20-25ml/20l"
-          },
-          {
-            "name": "Indoking 300SC",
-            "active_ingredient": "Emamectin benzoate 19g/l",
-            "application": "Foliar spray",
-            "dosage": "3ml/20l"
-          },
-          {
-            "name": "Legacy Extreme 500WDG",
-            "active_ingredient": "Indoxacarb 300 g/L",
-            "application": "Foliar spray",
-            "dosage": "2g/20l"
-          },
-          {
-            "name": "Ranger 480EC",
-            "active_ingredient": "Emamectin benzoate 100 g/kg, Lufenuron 400 g/kg",
-            "application": "Foliar spray",
-            "dosage": "20ml/20l"
-          },
-          {
-            "name": "Amiguard",
-            "active_ingredient": "Chlorpyrifos 480 g/L",
-            "application": "Foliar spray",
-            "dosage": "4g/20l"
-          },
-          {
-            "name": "Voliam targo",
-            "active_ingredient": "Emamectin benzoate57g/kg",
-            "application": "Foliar spray",
-            "dosage": "20ml/20l"
-          },
-          {
-            "name": "Voliam targo",
-            "active_ingredient": "Chlorantraniliprole 45g/l, Abamectin 18g/L",
-            "application": "Foliar spray",
-            "dosage": "20ml/20l"
-          }
-        ]
-      },
-      {
-        "name": "Stalk borer",
-        "signs": "Feed on leaves and find their way to stalk making it weak",
-        "prevention": "No prevention",
-        "chemicals": [
-          {
-            "name": "Profile 440 EC",
-            "active_ingredient": "Profenofos",
-            "application": "Foliar spray",
-            "dosage": "20 ml/l"
-          },
-          {
-            "name": "Occasion Star 200SC",
-            "active_ingredient": "Cypermethrin",
-            "application": "Foliar spray",
-            "dosage": "3mls/20l"
-          }
-        ]
-      },
-      {
-        "name": "Maize aphids",
-        "signs": "Soft bodied insects that feed by piercing and sucking",
-        "prevention": "No prevention",
-        "chemicals": [
-          {
-            "name": "Kingcode Elite 50EC",
-            "active_ingredient": "Acetamiprid35g/l, Lambda-Cyhalothrin 15g/l",
-            "application": "Foliar Spray",
-            "dosage": "10ml/20l"
-          }
-        ]
-      },
-      {
-        "name": "Cut Worms",
-        "signs": "Cut the stems of young seedlings",
-        "prevention": "No prevention",
-        "chemicals": [
-          {
-            "name": "Profile 440 EC",
-            "active_ingredient": "Profenofos, Cypermethrin",
-            "application": "Drench the soil",
-            "dosage": "20ml/20l"
-          }
-        ]
-      },
-      {
-        "name": "African bollworm",
-        "signs": "Attack mainly developing cobs",
-        "prevention": "No prevention",
-        "chemicals": [
-          {
-            "name": "Kinetic",
-            "active_ingredient": "Lambda cyhalothrin",
-            "application": "Foliar spray",
-            "dosage": "3ml/20l"
-          },
-          {
-            "name": "Plant extracts",
-            "active_ingredient": "neem, garlic or chilli",
-            "application": "Foliar spray",
-            "dosage": "3ml/20l"
-          }
-        ]
-      }
-    ]
-   
-  }
-
+      name: "Fall Army worm",
+      signs: "Attacks at seedling, vegetative, flowering and fruiting stage",
+      prevention: "No prevention",
+      chemicals: [
+        {
+          name: "Occasion star 200sc",
+          active_ingredient: "Emamectin benzoate 40g/l",
+          application: "Foliar spray",
+          dosage: "3ml/20l",
+        },
+        {
+          name: "Escort 50 EC",
+          active_ingredient: "Indoxacarb 160g/l",
+          application: "Foliar spray",
+          dosage: "20-25ml/20l",
+        },
+        {
+          name: "Indoking 300SC",
+          active_ingredient: "Emamectin benzoate 19g/l",
+          application: "Foliar spray",
+          dosage: "3ml/20l",
+        },
+        {
+          name: "Legacy Extreme 500WDG",
+          active_ingredient: "Indoxacarb 300 g/L",
+          application: "Foliar spray",
+          dosage: "2g/20l",
+        },
+        {
+          name: "Ranger 480EC",
+          active_ingredient: "Emamectin benzoate 100 g/kg, Lufenuron 400 g/kg",
+          application: "Foliar spray",
+          dosage: "20ml/20l",
+        },
+        {
+          name: "Amiguard",
+          active_ingredient: "Chlorpyrifos 480 g/L",
+          application: "Foliar spray",
+          dosage: "4g/20l",
+        },
+        {
+          name: "Voliam targo",
+          active_ingredient: "Emamectin benzoate57g/kg",
+          application: "Foliar spray",
+          dosage: "20ml/20l",
+        },
+        {
+          name: "Voliam targo",
+          active_ingredient: "Chlorantraniliprole 45g/l, Abamectin 18g/L",
+          application: "Foliar spray",
+          dosage: "20ml/20l",
+        },
+      ],
+    },
+    {
+      name: "Stalk borer",
+      signs: "Feed on leaves and find their way to stalk making it weak",
+      prevention: "No prevention",
+      chemicals: [
+        {
+          name: "Profile 440 EC",
+          active_ingredient: "Profenofos",
+          application: "Foliar spray",
+          dosage: "20 ml/l",
+        },
+        {
+          name: "Occasion Star 200SC",
+          active_ingredient: "Cypermethrin",
+          application: "Foliar spray",
+          dosage: "3mls/20l",
+        },
+      ],
+    },
+    {
+      name: "Maize aphids",
+      signs: "Soft bodied insects that feed by piercing and sucking",
+      prevention: "No prevention",
+      chemicals: [
+        {
+          name: "Kingcode Elite 50EC",
+          active_ingredient: "Acetamiprid35g/l, Lambda-Cyhalothrin 15g/l",
+          application: "Foliar Spray",
+          dosage: "10ml/20l",
+        },
+      ],
+    },
+    {
+      name: "Cut Worms",
+      signs: "Cut the stems of young seedlings",
+      prevention: "No prevention",
+      chemicals: [
+        {
+          name: "Profile 440 EC",
+          active_ingredient: "Profenofos, Cypermethrin",
+          application: "Drench the soil",
+          dosage: "20ml/20l",
+        },
+      ],
+    },
+    {
+      name: "African bollworm",
+      signs: "Attack mainly developing cobs",
+      prevention: "No prevention",
+      chemicals: [
+        {
+          name: "Kinetic",
+          active_ingredient: "Lambda cyhalothrin",
+          application: "Foliar spray",
+          dosage: "3ml/20l",
+        },
+        {
+          name: "Plant extracts",
+          active_ingredient: "neem, garlic or chilli",
+          application: "Foliar spray",
+          dosage: "3ml/20l",
+        },
+      ],
+    },
+  ],
+};
 
 export async function POST(request: Request) {
   const { cropPlanned } = await request.json();
@@ -174,9 +173,8 @@ export async function POST(request: Request) {
   );
 
   if (isMaizeRelated) {
-    console.log("Maize related disease")
+    console.log("Maize related disease");
     try {
-     
       const formattedPests: FormattedPest[] = maizeData.pests.map(
         (pest: Pest) => ({
           name: pest.name,
@@ -189,7 +187,7 @@ export async function POST(request: Request) {
         })
       );
 
-      return NextResponse.json({ pests: formattedPests });
+      return corsResponse({ pests: formattedPests });
     } catch (error) {
       console.error("Error fetching maize data:", error);
       return NextResponse.json(
@@ -247,12 +245,13 @@ export async function POST(request: Request) {
       }
     }
 
-    return NextResponse.json(result);
+    return corsResponse(result);
   } catch (error) {
     console.error("Error in pest analysis:", error);
-    return NextResponse.json(
-      { error: "Failed to analyze pest data" },
-      { status: 500 }
-    );
+    return corsResponse({ error: "Failed to analyze pest data" }, 500);
   }
+}
+
+export async function OPTIONS(request: Request) {
+  return corsResponse({});
 }
