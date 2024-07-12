@@ -8,7 +8,9 @@ const ApiList: React.FC = () => {
       <nav className="bg-green-600 p-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <h1 className="text-2xl font-bold text-white">
+            <Link href="/">
             Shamba Assistant AI API
+            </Link>
           </h1>
           <Link href="/api-docs" className="text-white hover:text-green-200">
             Home

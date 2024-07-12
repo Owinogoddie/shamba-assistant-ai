@@ -497,7 +497,7 @@
       "potassium_need": "number"
     },
     "exampleRequest": {
-      "cropName": "maize",
+      "cropName": "maize(corn)",
       "targetYield": 5000,
       "fieldSize": 1,
       "ph": 6.5,
@@ -558,7 +558,7 @@
         "location": {
           "label": "Nairobi, Kenya"
         },
-        "cropName": "maize",
+        "cropName": "maize(corn)",
         "nitrogen": 20,
         "phosphorus": 15,
         "potassium": 25,
