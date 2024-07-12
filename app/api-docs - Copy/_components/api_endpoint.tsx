@@ -1,5 +1,3 @@
-// app/api-docs/components/ApiEndpoint.tsx
-
 import React, { useState } from 'react';
 import { Copy, Check } from 'lucide-react';
 
@@ -26,6 +24,9 @@ const ApiEndpoint: React.FC<ApiEndpointProps> = ({
 }) => {
   const [copiedEndpoint, setCopiedEndpoint] = useState(false);
   const [copiedRequestBody, setCopiedRequestBody] = useState(false);
+  const [copiedResponseBody, setCopiedResponseBody] = useState(false);
+  const [copiedExampleRequest, setCopiedExampleRequest] = useState(false);
+  const [copiedExampleResponse, setCopiedExampleResponse] = useState(false);
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
   const fullUrl = `${baseUrl}${endpoint}`;
@@ -64,7 +65,7 @@ const ApiEndpoint: React.FC<ApiEndpointProps> = ({
             </dd>
           </div>
           <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt className="text-sm font-medium text-green-500">Request Body</dt>
+            <dt className="text-sm font-medium text-green-500">Request Bodyy</dt>
             <dd className="mt-1 text-sm text-green-900 sm:mt-0 sm:col-span-2">
               <pre className="bg-green-50 p-2 rounded overflow-x-auto relative">
                 {JSON.stringify(requestBody, null, 2)}
@@ -81,25 +82,46 @@ const ApiEndpoint: React.FC<ApiEndpointProps> = ({
           <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium text-green-500">Response Body</dt>
             <dd className="mt-1 text-sm text-green-900 sm:mt-0 sm:col-span-2">
-              <pre className="bg-green-50 p-2 rounded overflow-x-auto">
+              <pre className="bg-green-50 p-2 rounded overflow-x-auto relative">
                 {JSON.stringify(responseBody, null, 2)}
+                <button
+                  onClick={() => copyToClipboard(JSON.stringify(responseBody, null, 2), setCopiedResponseBody)}
+                  className="absolute top-2 right-2 text-green-500 hover:text-green-600 focus:outline-none"
+                >
+                  {copiedResponseBody ? <Check size={18} /> : <Copy size={18} />}
+                </button>
               </pre>
+              {copiedResponseBody && <span className="text-xs text-green-500">Copied!</span>}
             </dd>
           </div>
           <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium text-green-500">Example Request</dt>
             <dd className="mt-1 text-sm text-green-900 sm:mt-0 sm:col-span-2">
-              <pre className="bg-green-50 p-2 rounded overflow-x-auto">
+              <pre className="bg-green-50 p-2 rounded overflow-x-auto relative">
                 {JSON.stringify(exampleRequest, null, 2)}
+                <button
+                  onClick={() => copyToClipboard(JSON.stringify(exampleRequest, null, 2), setCopiedExampleRequest)}
+                  className="absolute top-2 right-2 text-green-500 hover:text-green-600 focus:outline-none"
+                >
+                  {copiedExampleRequest ? <Check size={18} /> : <Copy size={18} />}
+                </button>
               </pre>
+              {copiedExampleRequest && <span className="text-xs text-green-500">Copied!</span>}
             </dd>
           </div>
           <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium text-green-500">Example Response</dt>
             <dd className="mt-1 text-sm text-green-900 sm:mt-0 sm:col-span-2">
-              <pre className="bg-green-50 p-2 rounded overflow-x-auto">
+              <pre className="bg-green-50 p-2 rounded overflow-x-auto relative">
                 {JSON.stringify(exampleResponse, null, 2)}
+                <button
+                  onClick={() => copyToClipboard(JSON.stringify(exampleResponse, null, 2), setCopiedExampleResponse)}
+                  className="absolute top-2 right-2 text-green-500 hover:text-green-600 focus:outline-none"
+                >
+                  {copiedExampleResponse ? <Check size={18} /> : <Copy size={18} />}
+                </button>
               </pre>
+              {copiedExampleResponse && <span className="text-xs text-green-500">Copied!</span>}
             </dd>
           </div>
         </dl>
