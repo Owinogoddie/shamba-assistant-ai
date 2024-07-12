@@ -28,9 +28,55 @@ interface FormattedDisease {
 }
 
 interface MaizeData {
+  plant_name: string;
   diseases: Disease[];
 }
-
+const maizeData: MaizeData = 
+  {
+    "plant_name": "MAIZE",
+    "diseases": [
+      {
+        "name": "Maize lethal necrosis disease",
+        "signs": "Appearance of chlorotic mottling on leaves starting from older to younger leaves",
+        "prevention": "Control vectors such as aphids, thrips, leaf beetles and ensure proper nutrition",
+        "chemicals": [
+          {
+            "name": "No chemical available for the control of the virus",
+            "active_ingredient": "N/A",
+            "application": "N/A",
+            "dosage": "N/A"
+          }
+        ]
+      },
+      {
+        "name": "Maize Smut",
+        "signs": "Soil borne formation of whitish galls/swellings which rapture realising dark spores",
+        "prevention": "No prevention",
+        "chemicals": [
+          {
+            "name": "Gearlock Turbo",
+            "active_ingredient": "Metalaxyl 150 g/kg + Propamocarb hydrochloride 100 g/kg",
+            "application": "Drench the soil",
+            "dosage": "40g/20l"
+          }
+        ]
+      },
+      {
+        "name": "Northern leaf blight",
+        "signs": "Grey-green lesions on leaves which turn pale grey",
+        "prevention": "Plant resistant variety",
+        "chemicals": [
+          {
+            "name": "Gearlock Turbo 250wp",
+            "active_ingredient": "Metalaxyl 150 g/kg + Propamocarb hydrochloride 100 g/kg",
+            "application": "Foliar Spray",
+            "dosage": "40g/20l"
+          }
+        ]
+      }
+    ]
+  
+}
 export async function POST(request: Request) {
   const { cropPlanned } = await request.json();
 
@@ -40,14 +86,9 @@ export async function POST(request: Request) {
   );
 
   if (isMaizeRelated) {
+    console.log("Maize related pest")
     try {
-      const response = await fetch(
-        `https://shamba-assistant.vercel.app/pests_n_diseases/maize.json`
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch maize data");
-      }
-      const maizeData: MaizeData = await response.json();
+      
 
       const formattedDiseases: FormattedDisease[] = maizeData.diseases.map(
         (disease: Disease) => ({
