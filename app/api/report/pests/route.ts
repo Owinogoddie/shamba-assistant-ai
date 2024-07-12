@@ -42,9 +42,8 @@ export async function POST(request: Request) {
 
   if (isMaizeRelated) {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/pests_n_diseases/maize.json`
-      );
+      const url = new URL('/pests_n_diseases/maize.json', process.env.NEXT_PUBLIC_BASE_URL);
+const response = await fetch(url.toString());
 
       if (!response.ok) {
         throw new Error("Failed to fetch maize data");
