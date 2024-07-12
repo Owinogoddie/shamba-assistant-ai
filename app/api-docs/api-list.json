@@ -91,7 +91,7 @@
       },
       "cropName": "maize",
       "fieldSize": 10,
-      "targetYield": "5 tons/ha",
+      "targetYield": "50000",
       "ph": "6.5",
       "organicCarbon": "1.5",
       "nitrogen": "40",
