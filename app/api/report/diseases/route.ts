@@ -41,8 +41,9 @@ export async function POST(request: Request) {
 
   if (isMaizeRelated) {
     try {
-      const url = new URL('/pests_n_diseases/maize.json', process.env.NEXT_PUBLIC_BASE_URL);
-const response = await fetch(url.toString());
+      const response = await fetch(
+        `https://shamba-assistant.vercel.app/pests_n_diseases/maize.json`
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch maize data");
       }
