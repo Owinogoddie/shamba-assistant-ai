@@ -67,12 +67,12 @@ const routes = [
     href: "/settings",
     color: "text-gray-500",
   },
-  {
-    label: "API Documentation",
-    icon: FileJson,
-    href: "/api-docs",
-    color: "text-indigo-600",
-  },
+  // {
+  //   label: "API Documentation",
+  //   icon: FileJson,
+  //   href: "/api-docs",
+  //   color: "text-indigo-600",
+  // },
 ];
 
 export const Sidebar = () => {
