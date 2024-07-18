@@ -3,7 +3,7 @@ import { Groq } from "groq-sdk";
 import { corsResponse } from '../../cors';
 
 export async function POST(request: Request) {
-  const { farmData, npkResult } = await request.json();
+  const { farmData, npkResult, fertilizerPlanData } = await request.json();
 
   const reportPrompt = `
     Generate a comprehensive farm report for ${farmData.farmName}'s ${farmData.cropName} based on the following data:
@@ -17,17 +17,20 @@ export async function POST(request: Request) {
     - Soil Phosphorus: ${farmData.phosphorus} kg/ha
     - Soil Potassium: ${farmData.potassium} kg/ha
     - Soil Moisture: ${farmData.soilMoisture}%
-    - Organic Carbon: ${farmData.organicCarbon}%
+    - Organic Carbon: ${farmData.soilConductivity}%
     - pH: ${farmData.ph}
-
+    
     NPK Need:
     ${JSON.stringify(npkResult, null, 2)}
+    
+    Fertilizer Plan:
+    ${JSON.stringify(fertilizerPlanData, null, 2)}
     
     Please provide a detailed analysis including:
     1. Soil health assessment
     2. Nutrient deficiencies or excesses
     3. Recommendations for improving soil fertility
-    4. Suggested fertilizer application rates and timing
+    4. Suggested fertilizer application rates and timing (based on the provided fertilizer plan)
     5. Additional crop-specific recommendations
     6. Sustainable farming practices to consider
     7. Economic analysis of recommended interventions
@@ -50,7 +53,7 @@ export async function POST(request: Request) {
     const reportContent = reportResult.choices[0]?.message?.content;
 
     if (reportContent) {
-      console.log({reportContent})
+      // console.log({reportContent})
       return corsResponse({ reportContent });
     } else {
       return NextResponse.json({ error: "Failed to generate report content" }, { status: 500 });

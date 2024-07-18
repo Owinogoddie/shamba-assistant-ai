@@ -23,7 +23,6 @@ export function FarmForm({ onSubmit }: FarmFormProps) {
     fieldSize: 0,
     targetYield: "",
     ph: "",
-    organicCarbon: "",
     nitrogen: "",
     phosphorus: "",
     potassium: "",

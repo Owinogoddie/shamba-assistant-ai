@@ -8,11 +8,12 @@ import {
   Phone,
   Mail,
   MapPin,
-  Droplets
+  Droplets,
 } from "lucide-react";
 import { SoilData, SoilAnalysisReportData } from "./lib/types";
 import ReactMarkdown from "react-markdown";
 import Image from "next/image";
+import FertilizerPlanTable from "./_components/fertilizer-plan-table";
 
 function generateReportNumber() {
   const date = new Date();
@@ -38,10 +39,10 @@ const SoilAnalysisReport: React.FC<SoilAnalysisReportData> = ({
   farmInfo,
   soilData,
   recommendations,
-  soilCorrectionPlan,
   pestControl,
   diseaseControl,
   Nutrientrecommendation,
+  fertilizerApplicationPlan,
 }) => {
   const createMappedData = (soilData: any) => {
     return [
@@ -80,12 +81,6 @@ const SoilAnalysisReport: React.FC<SoilAnalysisReportData> = ({
         value: soilData.potassium,
         color: "purple",
         icon: "/potassium.svg",
-      },
-      {
-        label: "Organic Matter",
-        value: soilData.carbon,
-        color: "green",
-        icon: Sprout,
       },
       {
         label: "Moisture",
@@ -214,7 +209,7 @@ const SoilAnalysisReport: React.FC<SoilAnalysisReportData> = ({
                   Nutrient
                 </th>
                 <th className="py-3 px-6 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
-                  Amount (kg/ha)
+                  Amount (kg/acre)
                 </th>
               </tr>
             </thead>
@@ -237,58 +232,12 @@ const SoilAnalysisReport: React.FC<SoilAnalysisReportData> = ({
         </div>
       </section>
 
-      <div className="page-break-before">
-        {/* Detailed Analysis and Recommendations */}
-        <section className="mb-8 p-6  bg-white">
-          <h2 className="text-2xl font-semibold mb-4 text-green-800">
-            Detailed Analysis & Recommendations
-          </h2>
-          <div className="space-y-4">
-            {/* <p className="text-gray-700">{recommendations.analysis}</p> */}
-            <h3 className="font-semibold text-green-700 mt-4">
-              Recommendations:
-            </h3>
-            <ReactMarkdown className="prose prose-sm max-w-none">
-              {recommendations}
-            </ReactMarkdown>
-          </div>
-        </section>
-      </div>
-
-      {/* Soil Correction Plan, Pest Control, and Disease Control */}
+      {/* Fertilizer Plan, Pest Control, and Disease Control */}
       <div>
-        {/* Soil Correction Plan */}
+        {/* Fertilizer Plan */}
         <br />
         <section className="mb-8 mt-6 page-break-inside-avoid">
-          <h2 className="text-2xl font-semibold mb-4 mt-4 text-green-800">
-            Soil Correction Plan
-          </h2>
-          <table className="min-w-full bg-white border border-gray-300 shadow-lg rounded-lg overflow-hidden mb-8">
-            <thead>
-              <tr className="bg-green-100">
-                <th className="py-2 px-4 border-b">Timing</th>
-                <th className="py-2 px-4 border-b">Instructions</th>
-                <th className="py-2 px-4 border-b">Best Option</th>
-                <th className="py-2 px-4 border-b">First Alternative</th>
-                <th className="py-2 px-4 border-b">Second Alternative</th>
-              </tr>
-            </thead>
-            <tbody>
-              {soilCorrectionPlan.map((plan, index) => (
-                <tr key={index} className={index % 2 === 0 ? "bg-gray-50" : ""}>
-                  <td className="py-2 px-4 border-b">{plan.timing}</td>
-                  <td className="py-2 px-4 border-b">{plan.instructions}</td>
-                  <td className="py-2 px-4 border-b">{plan.bestOption}</td>
-                  <td className="py-2 px-4 border-b">
-                    {plan.firstAlternative}
-                  </td>
-                  <td className="py-2 px-4 border-b">
-                    {plan.secondAlternative}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <FertilizerPlanTable plan={fertilizerApplicationPlan} />
         </section>
 
         {/* Pest Control */}
@@ -369,6 +318,26 @@ rateOfApplication */}
               ))}
             </tbody>
           </table>
+        </section>
+      </div>
+
+      {/* analysis */}
+
+      <div className="page-break-before">
+        {/* Detailed Analysis and Recommendations */}
+        <section className="mb-8 p-6  bg-white">
+          <h2 className="text-2xl font-semibold mb-4 text-green-800">
+            Detailed Analysis & Recommendations
+          </h2>
+          <div className="space-y-4">
+            {/* <p className="text-gray-700">{recommendations.analysis}</p> */}
+            <h3 className="font-semibold text-green-700 mt-4">
+              Recommendations:
+            </h3>
+            <ReactMarkdown className="prose prose-sm max-w-none">
+              {recommendations}
+            </ReactMarkdown>
+          </div>
         </section>
       </div>
 

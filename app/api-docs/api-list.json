@@ -2,10 +2,10 @@
   {
     "id": "farm-report",
     "title": "Farm Report Generator",
-    "shortDescription": "Generate a comprehensive farm report including soil analysis, pest and disease information, and recommendations.",
+    "shortDescription": "Generate a comprehensive farm report including soil analysis, pest and disease information, fertilizer recommendations, and final recommendations.",
     "endpoint": "/api/farm-report",
     "method": "POST",
-    "description": "This endpoint generates a complete farm report based on the provided farm data. It includes NPK predictions, pest and disease information, soil correction plans, and final recommendations. The endpoint internally calls multiple specialized APIs to gather all necessary information.",
+    "description": "This endpoint generates a comprehensive farm report based on the provided farm data. It includes NPK predictions, pest and disease information, fertilizer application plans, and final recommendations. The endpoint internally calls multiple specialized APIs to gather all necessary information.",
     "requestBody": {
       "farmerName": "string",
       "farmName": "string",
@@ -19,22 +19,18 @@
       "fieldSize": "number",
       "targetYield": "string",
       "ph": "string",
-      "organicCarbon": "string",
+      "soilConductivity": "string",
       "nitrogen": "string",
       "phosphorus": "string",
       "potassium": "string",
       "soilMoisture": "string",
-      "temperature": "number",
-      "soilConductivity": "any"
+      "temperature": "number"
     },
     "responseBody": {
       "farmInfo": {
         "name": "string",
         "owner": "string",
-        "location": "string",
-        "county": "string",
-        "fieldSize": "number",
-        "targetYield": "string"
+        "location": "string"
       },
       "Nutrientrecommendation": {
         "N": "number",
@@ -46,20 +42,10 @@
         "phosphorus": "string",
         "potassium": "string",
         "moisture": "string",
-        "carbon": "string",
         "temperature": "number",
         "ph": "string",
         "conductivity": "any"
       },
-      "soilCorrectionPlan": [
-        {
-          "timing": "string",
-          "instructions": "string",
-          "bestOption": "string",
-          "firstAlternative": "string",
-          "secondAlternative": "string"
-        }
-      ],
       "diseaseControl": [
         {
           "name": "string",
@@ -78,7 +64,43 @@
           "rateOfApplication": "string"
         }
       ],
-      "recommendations": "string"
+      "recommendations": "string",
+      "fertilizerApplicationPlan": {
+        "bestOption": {
+          "firstApplication": {
+            "timing": "string",
+            "fertilizer": "string"
+          },
+          "secondApplication": {
+            "timing": "string",
+            "fertilizer": "string"
+          }
+        },
+        "secondOption": {
+          "firstApplication": {
+            "timing": "string",
+            "fertilizer": "string"
+          },
+          "secondApplication": {
+            "timing": "string",
+            "fertilizer": "string"
+          }
+        },
+        "thirdOption": {
+          "firstApplication": {
+            "timing": "string",
+            "fertilizer": "string"
+          },
+          "secondApplication": {
+            "timing": "string",
+            "fertilizer": "string"
+          }
+        },
+        "soilCorrection": {
+          "limeApplication": "string",
+          "organicMatterApplication": "string"
+        }
+      }
     },
     "exampleRequest": {
       "farmerName": "John Doe",
@@ -93,7 +115,6 @@
       "fieldSize": 10,
       "targetYield": "50000",
       "ph": "6.5",
-      "organicCarbon": "1.5",
       "nitrogen": "40",
       "phosphorus": "50",
       "potassium": "30",
@@ -105,10 +126,7 @@
       "farmInfo": {
         "name": "Green Acres",
         "owner": "John Doe",
-        "location": "Nairobi, Kenya",
-        "county": "Nairobi",
-        "fieldSize": 10,
-        "targetYield": "5 tons/ha"
+        "location": "Nairobi, Kenya"
       },
       "Nutrientrecommendation": {
         "N": 60,
@@ -120,34 +138,10 @@
         "phosphorus": "50",
         "potassium": "30",
         "moisture": "30",
-        "carbon": "1.5",
         "temperature": 25,
         "ph": "6.5",
         "conductivity": 0.5
       },
-      "soilCorrectionPlan": [
-        {
-          "timing": "Before planting",
-          "instructions": "Apply nitrogen and potassium fertilizers to correct soil nutrient levels.",
-          "bestOption": "Apply 20 kg/ha of nitrogen and 10 kg/ha of potassium fertilizer.",
-          "firstAlternative": "Use a balanced NPK fertilizer with higher N and K content.",
-          "secondAlternative": "Apply organic compost rich in nitrogen and potassium."
-        },
-        {
-          "timing": "At planting",
-          "instructions": "Incorporate starter fertilizer into the soil.",
-          "bestOption": "Apply 10 kg/ha of phosphorus fertilizer in the planting holes.",
-          "firstAlternative": "Use a balanced NPK fertilizer with higher P content.",
-          "secondAlternative": "Apply bone meal as an organic phosphorus source."
-        },
-        {
-          "timing": "6 weeks after planting",
-          "instructions": "Side-dress with nitrogen fertilizer.",
-          "bestOption": "Apply 30 kg/ha of nitrogen fertilizer along the plant rows.",
-          "firstAlternative": "Use urea as a nitrogen source, applied 10 cm away from the plant base.",
-          "secondAlternative": "Apply liquid nitrogen fertilizer through fertigation if irrigation is available."
-        }
-      ],
       "diseaseControl": [
         {
           "name": "Maize Streak Virus",
@@ -180,13 +174,452 @@
           "rateOfApplication": "8-10 kg/ha"
         }
       ],
-      "recommendations": "Based on the soil analysis and crop requirements for maize, we recommend the following:\n1. Follow the soil correction plan for optimal nutrient management.\n2. Monitor soil moisture closely, especially during critical growth stages.\n3. Implement crop rotation with legumes to improve soil nitrogen content naturally.\n4. Use resistant maize varieties to combat Maize Streak Virus.\n5. Practice good field hygiene and residue management to prevent Gray Leaf Spot.\n6. Implement Integrated Pest Management (IPM) strategies for Fall Armyworm and Stem Borer control.\n7. Consider soil pH management to maintain the current favorable level for maize growth."
+      "recommendations": "Based on the soil analysis and crop requirements for maize, we recommend the following:\n1. Follow the fertilizer application plan for optimal nutrient management.\n2. Monitor soil moisture closely, especially during critical growth stages.\n3. Implement crop rotation with legumes to improve soil nitrogen content naturally.\n4. Use resistant maize varieties to combat Maize Streak Virus.\n5. Practice good field hygiene and residue management to prevent Gray Leaf Spot.\n6. Implement Integrated Pest Management (IPM) strategies for Fall Armyworm and Stem Borer control.\n7. Consider soil pH management to maintain the current favorable level for maize growth.",
+      "fertilizerApplicationPlan": {
+        "bestOption": {
+          "firstApplication": {
+            "timing": "At Planting",
+            "fertilizer": "Apply 446.68 kg of 26:0:0 combined with 598.01 kg of 18:38:0 2.3%CaO 0.2% MgO 5% S"
+          },
+          "secondApplication": {
+            "timing": "6 weeks after",
+            "fertilizer": "Apply 218.26 kg of 26:0:0"
+          }
+        },
+        "secondOption": {
+          "firstApplication": {
+            "timing": "At Planting",
+            "fertilizer": "Apply 383.46 kg of 26:0:0 13%S combined with 800.12 kg of 18:38:0 2.3%CaO 0.2% MgO 5% S"
+          },
+          "secondApplication": {
+            "timing": "6 weeks after",
+            "fertilizer": "Apply 221.36 kg of 26:0:0"
+          }
+        },
+        "thirdOption": {
+          "firstApplication": {
+            "timing": "At Planting",
+            "fertilizer": "Apply 456.83 kg of 26:0:0 10%CaO 5%S combined with 810.11 kg of 18:38:0 2.3%CaO 0.2% MgO 5% S"
+          },
+          "secondApplication": {
+            "timing": "6 weeks after",
+            "fertilizer": "Apply 223.30 kg of 40:0:0 14%S"
+          }
+        },
+        "soilCorrection": {
+          "limeApplication": "Apply 428.00 kg of Agricultural Lime Before Planting",
+          "organicMatterApplication": "Apply 13429.60 kg of Compost or Animal Manure Before Planting"
+        }
+      }
     },
     "errors": [
       {
         "code": 500,
         "message": "Failed to generate farm report",
         "description": "This error occurs when there's an internal server error or when one or more of the internal API calls fail."
+      }
+    ]
+  },
+  {
+    "id": "fertilizer-plan",
+    "title": "Fertilizer Plan Generator",
+    "shortDescription": "Generate a customized fertilizer application plan based on crop and soil data.",
+    "endpoint": "/api/fertilizer-plan",
+    "method": "POST",
+    "description": "This endpoint generates a customized fertilizer application plan based on the provided crop and soil data. It calculates the best fertilizer options, application timings, and amounts, as well as any necessary soil corrections.",
+    "requestBody": {
+      "crop_name": "string",
+      "target_yield": "number",
+      "field_size": "number",
+      "ph_water": "number",
+      "organic_carbon": "number",
+      "total_nitrogen": "number",
+      "phosphorus_m3": "number",
+      "potassium_exch": "number"
+    },
+    "responseBody": {
+      "bestOption": {
+        "firstApplication": {
+          "timing": "string",
+          "fertilizer": "string"
+        },
+        "secondApplication": {
+          "timing": "string",
+          "fertilizer": "string"
+        }
+      },
+      "secondOption": {
+        "firstApplication": {
+          "timing": "string",
+          "fertilizer": "string"
+        },
+        "secondApplication": {
+          "timing": "string",
+          "fertilizer": "string"
+        }
+      },
+      "thirdOption": {
+        "firstApplication": {
+          "timing": "string",
+          "fertilizer": "string"
+        },
+        "secondApplication": {
+          "timing": "string",
+          "fertilizer": "string"
+        }
+      },
+      "soilCorrection": {
+        "limeApplication": "string",
+        "organicMatterApplication": "string"
+      }
+    },
+    "exampleRequest": {
+      "crop_name": "Maize",
+      "target_yield": 5,
+      "field_size": 1,
+      "ph_water": 6.5,
+      "organic_carbon": 1.2,
+      "total_nitrogen": 0.15,
+      "phosphorus_m3": 20,
+      "potassium_exch": 150
+    },
+    "exampleResponse": {
+      "bestOption": {
+        "firstApplication": {
+          "timing": "At planting",
+          "fertilizer": "Apply 100.00 kg of NPK 17:17:17 combined with 50.00 kg of Urea"
+        },
+        "secondApplication": {
+          "timing": "4 weeks after planting",
+          "fertilizer": "Apply 75.00 kg of Urea"
+        }
+      },
+      "secondOption": {
+        "firstApplication": {
+          "timing": "At planting",
+          "fertilizer": "Apply 120.00 kg of DAP combined with 30.00 kg of MOP"
+        },
+        "secondApplication": {
+          "timing": "4 weeks after planting",
+          "fertilizer": "Apply 80.00 kg of Urea"
+        }
+      },
+      "thirdOption": {
+        "firstApplication": {
+          "timing": "At planting",
+          "fertilizer": "Apply 150.00 kg of NPK 15:15:15"
+        },
+        "secondApplication": {
+          "timing": "4 weeks after planting",
+          "fertilizer": "Apply 70.00 kg of Urea"
+        }
+      },
+      "soilCorrection": {
+        "limeApplication": "Apply 200.00 kg of Agricultural lime before planting",
+        "organicMatterApplication": "Apply 1000.00 kg of Farmyard manure before planting"
+      }
+    },
+    "errors": [
+      {
+        "code": 400,
+        "message": "Bad Request",
+        "description": "This error occurs when the request is missing required parameters or contains invalid data."
+      },
+      {
+        "code": 500,
+        "message": "Internal server error",
+        "description": "This error occurs when there's an unexpected error during the fertilizer plan generation or when the external API request fails."
+      }
+    ]
+  },
+  {
+    "id": "disease-report",
+    "title": "Disease Report",
+    "shortDescription": "Get information about potential diseases for a specific crop.",
+    "endpoint": "/api/report/diseases",
+    "method": "POST",
+    "description": "This endpoint provides detailed information about potential diseases for a specified crop, including prevention methods and chemical control options.",
+    "requestBody": {
+      "cropPlanned": "string"
+    },
+    "responseBody": {
+      "diseases": [
+        {
+          "name": "string",
+          "prevention": "string",
+          "chemicalControl": "string",
+          "modeOfApplication": "string",
+          "rateOfApplication": "string"
+        }
+      ]
+    },
+    "exampleRequest": {
+      "cropPlanned": "maize"
+    },
+    "exampleResponse": {
+      "diseases": [
+        {
+          "name": "Maize Streak Virus",
+          "prevention": "Use resistant varieties and control insect vectors",
+          "chemicalControl": "No effective chemical control",
+          "modeOfApplication": "N/A",
+          "rateOfApplication": "N/A"
+        }
+      ]
+    },
+    "errors": [
+      {
+        "code": 500,
+        "message": "Failed to fetch maize data",
+        "description": "This error occurs when there's an issue retrieving maize-specific disease data."
+      },
+      {
+        "code": 500,
+        "message": "Failed to analyze disease data",
+        "description": "This error occurs when there's an issue analyzing disease data for non-maize crops using the AI model."
+      }
+    ]
+  },
+  {
+    "id": "npk-predictor",
+    "title": "NPK Predictor",
+    "shortDescription": "Predict NPK needs based on farm data.",
+    "endpoint": "/api/report/npk-predictor",
+    "method": "POST",
+    "description": "This endpoint predicts the NPK (Nitrogen, Phosphorus, Potassium) needs for a crop based on provided farm data.",
+    "requestBody": {
+      "cropName": "string",
+      "targetYield": "number",
+      "fieldSize": "number",
+      "ph": "number",
+      "organicCarbon": "number",
+      "nitrogen": "number",
+      "phosphorus": "number",
+      "potassium": "number",
+      "soilMoisture": "number"
+    },
+    "responseBody": {
+      "nitrogen_need": "number",
+      "phosphorus_need": "number",
+      "potassium_need": "number"
+    },
+    "exampleRequest": {
+      "cropName": "maize(corn)",
+      "targetYield": 5000,
+      "fieldSize": 1,
+      "ph": 6.5,
+      "organicCarbon": 1.2,
+      "nitrogen": 20,
+      "phosphorus": 15,
+      "potassium": 25,
+      "soilMoisture": 60
+    },
+    "exampleResponse": {
+      "nitrogen_need": 120,
+      "phosphorus_need": 60,
+      "potassium_need": 40
+    },
+    "errors": [
+      {
+        "code": 500,
+        "message": "Failed to predict NPK needs",
+        "description": "This error occurs when there's an issue with the external NPK prediction service or processing the prediction results."
+      }
+    ]
+  },
+  {
+    "id": "final-report",
+    "title": "Final Report",
+    "shortDescription": "Generate a comprehensive farm report based on farm data and NPK results.",
+    "endpoint": "/api/report/recommendations",
+    "method": "POST",
+    "description": "This endpoint generates a comprehensive farm report using the provided farm data and NPK results.",
+    "requestBody": {
+      "farmData": {
+        "farmName": "string",
+        "farmerName": "string",
+        "location": {
+          "label": "string"
+        },
+        "cropName": "string",
+        "nitrogen": "number",
+        "phosphorus": "number",
+        "potassium": "number",
+        "soilMoisture": "number",
+        "organicCarbon": "number",
+        "ph": "number"
+      },
+      "npkResult": {
+        "nitrogen_need": "number",
+        "phosphorus_need": "number",
+        "potassium_need": "number"
+      }
+    },
+    "responseBody": {
+      "reportContent": "string"
+    },
+    "exampleRequest": {
+      "farmData": {
+        "farmName": "Green Acres",
+        "farmerName": "John Doe",
+        "location": {
+          "label": "Nairobi, Kenya"
+        },
+        "cropName": "maize(corn)",
+        "nitrogen": 20,
+        "phosphorus": 15,
+        "potassium": 25,
+        "soilMoisture": 60,
+        "organicCarbon": 1.2,
+        "ph": 6.5
+      },
+      "npkResult": {
+        "nitrogen_need": 120,
+        "phosphorus_need": 60,
+        "potassium_need": 40
+      }
+    },
+    "exampleResponse": {
+      "reportContent": "Detailed farm report content..."
+    },
+    "errors": [
+      {
+        "code": 500,
+        "message": "Failed to generate report content",
+        "description": "This error occurs when the AI model fails to generate the final report content."
+      },
+      {
+        "code": 500,
+        "message": "Internal server error",
+        "description": "This error occurs when there's an unexpected error during the final report generation process."
+      }
+    ]
+  },
+  {
+    "id": "pest-report",
+    "title": "Pest Report",
+    "shortDescription": "Get information about potential pests for a specific crop.",
+    "endpoint": "/api/report/pests",
+    "method": "POST",
+    "description": "This endpoint provides detailed information about potential pests for a specified crop, including prevention methods and chemical control options.",
+    "requestBody": {
+      "cropPlanned": "string"
+    },
+    "responseBody": {
+      "pests": [
+        {
+          "name": "string",
+          "prevention": "string",
+          "chemicalControl": "string",
+          "modeOfApplication": "string",
+          "rateOfApplication": "string"
+        }
+      ]
+    },
+    "exampleRequest": {
+      "cropPlanned": "tomato"
+    },
+    "exampleResponse": {
+      "pests": [
+        {
+          "name": "Tomato Hornworm",
+          "prevention": "Crop rotation, handpicking",
+          "chemicalControl": "Bacillus thuringiensis (Bt)",
+          "modeOfApplication": "Foliar spray",
+          "rateOfApplication": "1-2 tsp per gallon of water"
+        }
+      ]
+    },
+    "errors": [
+      {
+        "code": 500,
+        "message": "Failed to fetch maize data",
+        "description": "This error occurs when there's an issue retrieving maize-specific pest data."
+      },
+      {
+        "code": 500,
+        "message": "Failed to analyze pest data",
+        "description": "This error occurs when there's an issue analyzing pest data for non-maize crops using the AI model."
+      }
+    ]
+  },
+  {
+    "id": "soil-correction-plan",
+    "title": "Soil Correction Plan",
+    "shortDescription": "Generate a soil correction plan based on farm data and NPK results.",
+    "endpoint": "/api/report/soil-correction-plan",
+    "method": "POST",
+    "description": "This endpoint generates a detailed soil correction plan based on the provided farm data and NPK results.",
+    "requestBody": {
+      "farmData": {
+        "cropName": "string",
+        "targetYield": "number",
+        "fieldSize": "number",
+        "ph": "number",
+        "organicCarbon": "number",
+        "nitrogen": "number",
+        "phosphorus": "number",
+        "potassium": "number",
+        "soilMoisture": "number"
+      },
+      "npkResult": {
+        "nitrogen_need": "number",
+        "phosphorus_need": "number",
+        "potassium_need": "number"
+      }
+    },
+    "responseBody": {
+      "soilCorrectionPlan": [
+        {
+          "timing": "string",
+          "instructions": "string",
+          "bestOption": "string",
+          "firstAlternative": "string",
+          "secondAlternative": "string"
+        }
+      ]
+    },
+    "exampleRequest": {
+      "farmData": {
+        "cropName": "maize",
+        "targetYield": 5000,
+        "fieldSize": 1,
+        "ph": 6.5,
+        "organicCarbon": 1.2,
+        "nitrogen": 20,
+        "phosphorus": 15,
+        "potassium": 25,
+        "soilMoisture": 60
+      },
+      "npkResult": {
+        "nitrogen_need": 120,
+        "phosphorus_need": 60,
+        "potassium_need": 40
+      }
+    },
+    "exampleResponse": {
+      "soilCorrectionPlan": [
+        {
+          "timing": "Before planting",
+          "instructions": "Apply base fertilizer and adjust soil pH",
+          "bestOption": "Apply 100 kg/ha of NPK 17-17-17",
+          "firstAlternative": "Apply 80 kg/ha of DAP",
+          "secondAlternative": "Apply 90 kg/ha of NPK 15-15-15"
+        },
+        {
+          "timing": "6 weeks after planting",
+          "instructions": "Apply top dressing fertilizer",
+          "bestOption": "Apply 100 kg/ha of Urea",
+          "firstAlternative": "Apply 120 kg/ha of CAN",
+          "secondAlternative": "Apply 90 kg/ha of Ammonium Sulfate"
+        }
+      ]
+    },
+    "errors": [
+      {
+        "code": 500,
+        "message": "Failed to generate soil correction plan",
+        "description": "This error occurs when there's an issue generating the soil correction plan using the AI model or processing the results."
       }
     ]
   },
@@ -422,297 +855,6 @@
         "code": 500,
         "message": "Internal server error",
         "description": "This error occurs when there's an unexpected error during the processing of the general crops request."
-      }
-    ]
-  },
-  {
-    "id": "disease-report",
-    "title": "Disease Report",
-    "shortDescription": "Get information about potential diseases for a specific crop.",
-    "endpoint": "/api/report/diseases",
-    "method": "POST",
-    "description": "This endpoint provides detailed information about potential diseases for a specified crop, including prevention methods and chemical control options.",
-    "requestBody": {
-      "cropPlanned": "string"
-    },
-    "responseBody": {
-      "diseases": [
-        {
-          "name": "string",
-          "prevention": "string",
-          "chemicalControl": "string",
-          "modeOfApplication": "string",
-          "rateOfApplication": "string"
-        }
-      ]
-    },
-    "exampleRequest": {
-      "cropPlanned": "maize"
-    },
-    "exampleResponse": {
-      "diseases": [
-        {
-          "name": "Maize Streak Virus",
-          "prevention": "Use resistant varieties and control insect vectors",
-          "chemicalControl": "No effective chemical control",
-          "modeOfApplication": "N/A",
-          "rateOfApplication": "N/A"
-        }
-      ]
-    },
-    "errors": [
-      {
-        "code": 500,
-        "message": "Failed to fetch maize data",
-        "description": "This error occurs when there's an issue retrieving maize-specific disease data."
-      },
-      {
-        "code": 500,
-        "message": "Failed to analyze disease data",
-        "description": "This error occurs when there's an issue analyzing disease data for non-maize crops using the AI model."
-      }
-    ]
-  },
-  {
-    "id": "npk-predictor",
-    "title": "NPK Predictor",
-    "shortDescription": "Predict NPK needs based on farm data.",
-    "endpoint": "/api/report/npk-predictor",
-    "method": "POST",
-    "description": "This endpoint predicts the NPK (Nitrogen, Phosphorus, Potassium) needs for a crop based on provided farm data.",
-    "requestBody": {
-      "cropName": "string",
-      "targetYield": "number",
-      "fieldSize": "number",
-      "ph": "number",
-      "organicCarbon": "number",
-      "nitrogen": "number",
-      "phosphorus": "number",
-      "potassium": "number",
-      "soilMoisture": "number"
-    },
-    "responseBody": {
-      "nitrogen_need": "number",
-      "phosphorus_need": "number",
-      "potassium_need": "number"
-    },
-    "exampleRequest": {
-      "cropName": "maize(corn)",
-      "targetYield": 5000,
-      "fieldSize": 1,
-      "ph": 6.5,
-      "organicCarbon": 1.2,
-      "nitrogen": 20,
-      "phosphorus": 15,
-      "potassium": 25,
-      "soilMoisture": 60
-    },
-    "exampleResponse": {
-      "nitrogen_need": 120,
-      "phosphorus_need": 60,
-      "potassium_need": 40
-    },
-    "errors": [
-      {
-        "code": 500,
-        "message": "Failed to predict NPK needs",
-        "description": "This error occurs when there's an issue with the external NPK prediction service or processing the prediction results."
-      }
-    ]
-  },
-  {
-    "id": "final-report",
-    "title": "Final Report",
-    "shortDescription": "Generate a comprehensive farm report based on farm data and NPK results.",
-    "endpoint": "/api/report/final-report",
-    "method": "POST",
-    "description": "This endpoint generates a comprehensive farm report using the provided farm data and NPK results.",
-    "requestBody": {
-      "farmData": {
-        "farmName": "string",
-        "farmerName": "string",
-        "location": {
-          "label": "string"
-        },
-        "cropName": "string",
-        "nitrogen": "number",
-        "phosphorus": "number",
-        "potassium": "number",
-        "soilMoisture": "number",
-        "organicCarbon": "number",
-        "ph": "number"
-      },
-      "npkResult": {
-        "nitrogen_need": "number",
-        "phosphorus_need": "number",
-        "potassium_need": "number"
-      }
-    },
-    "responseBody": {
-      "reportContent": "string"
-    },
-    "exampleRequest": {
-      "farmData": {
-        "farmName": "Green Acres",
-        "farmerName": "John Doe",
-        "location": {
-          "label": "Nairobi, Kenya"
-        },
-        "cropName": "maize(corn)",
-        "nitrogen": 20,
-        "phosphorus": 15,
-        "potassium": 25,
-        "soilMoisture": 60,
-        "organicCarbon": 1.2,
-        "ph": 6.5
-      },
-      "npkResult": {
-        "nitrogen_need": 120,
-        "phosphorus_need": 60,
-        "potassium_need": 40
-      }
-    },
-    "exampleResponse": {
-      "reportContent": "Detailed farm report content..."
-    },
-    "errors": [
-      {
-        "code": 500,
-        "message": "Failed to generate report content",
-        "description": "This error occurs when the AI model fails to generate the final report content."
-      },
-      {
-        "code": 500,
-        "message": "Internal server error",
-        "description": "This error occurs when there's an unexpected error during the final report generation process."
-      }
-    ]
-  },
-  {
-    "id": "pest-report",
-    "title": "Pest Report",
-    "shortDescription": "Get information about potential pests for a specific crop.",
-    "endpoint": "/api/report/pests",
-    "method": "POST",
-    "description": "This endpoint provides detailed information about potential pests for a specified crop, including prevention methods and chemical control options.",
-    "requestBody": {
-      "cropPlanned": "string"
-    },
-    "responseBody": {
-      "pests": [
-        {
-          "name": "string",
-          "prevention": "string",
-          "chemicalControl": "string",
-          "modeOfApplication": "string",
-          "rateOfApplication": "string"
-        }
-      ]
-    },
-    "exampleRequest": {
-      "cropPlanned": "tomato"
-    },
-    "exampleResponse": {
-      "pests": [
-        {
-          "name": "Tomato Hornworm",
-          "prevention": "Crop rotation, handpicking",
-          "chemicalControl": "Bacillus thuringiensis (Bt)",
-          "modeOfApplication": "Foliar spray",
-          "rateOfApplication": "1-2 tsp per gallon of water"
-        }
-      ]
-    },
-    "errors": [
-      {
-        "code": 500,
-        "message": "Failed to fetch maize data",
-        "description": "This error occurs when there's an issue retrieving maize-specific pest data."
-      },
-      {
-        "code": 500,
-        "message": "Failed to analyze pest data",
-        "description": "This error occurs when there's an issue analyzing pest data for non-maize crops using the AI model."
-      }
-    ]
-  },
-  {
-    "id": "soil-correction-plan",
-    "title": "Soil Correction Plan",
-    "shortDescription": "Generate a soil correction plan based on farm data and NPK results.",
-    "endpoint": "/api/report/soil-correction-plan",
-    "method": "POST",
-    "description": "This endpoint generates a detailed soil correction plan based on the provided farm data and NPK results.",
-    "requestBody": {
-      "farmData": {
-        "cropName": "string",
-        "targetYield": "number",
-        "fieldSize": "number",
-        "ph": "number",
-        "organicCarbon": "number",
-        "nitrogen": "number",
-        "phosphorus": "number",
-        "potassium": "number",
-        "soilMoisture": "number"
-      },
-      "npkResult": {
-        "nitrogen_need": "number",
-        "phosphorus_need": "number",
-        "potassium_need": "number"
-      }
-    },
-    "responseBody": {
-      "soilCorrectionPlan": [
-        {
-          "timing": "string",
-          "instructions": "string",
-          "bestOption": "string",
-          "firstAlternative": "string",
-          "secondAlternative": "string"
-        }
-      ]
-    },
-    "exampleRequest": {
-      "farmData": {
-        "cropName": "maize",
-        "targetYield": 5000,
-        "fieldSize": 1,
-        "ph": 6.5,
-        "organicCarbon": 1.2,
-        "nitrogen": 20,
-        "phosphorus": 15,
-        "potassium": 25,
-        "soilMoisture": 60
-      },
-      "npkResult": {
-        "nitrogen_need": 120,
-        "phosphorus_need": 60,
-        "potassium_need": 40
-      }
-    },
-    "exampleResponse": {
-      "soilCorrectionPlan": [
-        {
-          "timing": "Before planting",
-          "instructions": "Apply base fertilizer and adjust soil pH",
-          "bestOption": "Apply 100 kg/ha of NPK 17-17-17",
-          "firstAlternative": "Apply 80 kg/ha of DAP",
-          "secondAlternative": "Apply 90 kg/ha of NPK 15-15-15"
-        },
-        {
-          "timing": "6 weeks after planting",
-          "instructions": "Apply top dressing fertilizer",
-          "bestOption": "Apply 100 kg/ha of Urea",
-          "firstAlternative": "Apply 120 kg/ha of CAN",
-          "secondAlternative": "Apply 90 kg/ha of Ammonium Sulfate"
-        }
-      ]
-    },
-    "errors": [
-      {
-        "code": 500,
-        "message": "Failed to generate soil correction plan",
-        "description": "This error occurs when there's an issue generating the soil correction plan using the AI model or processing the results."
       }
     ]
   },

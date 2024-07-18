@@ -9,16 +9,17 @@ export async function POST(req: NextRequest) {
   try {
     const farmData: FarmData = await req.json();
 
-    // NPK prediction
-    const npkResult = await predictNPK(farmData);
+    // First, calling the predictNPK and generateFertilizerPlan in parallel
+    const [npkResult, fertilizerPlanData] = await Promise.all([
+      predictNPK(farmData),
+      generateFertilizerPlan(farmData),
+    ]);
 
-    // Parallel calls for other data
-    const [pestsData, diseasesData, soilCorrectionData, finalReportData] =
-      await Promise.all([
+      // 2nd, calling the the rest of the functions in parallel
+      const [pestsData, diseasesData, finalReportData] = await Promise.all([
         fetchPests(farmData.cropName),
         fetchDiseases(farmData.cropName),
-        generateSoilCorrectionPlan(farmData, npkResult),
-        generateFinalReport(farmData, npkResult),
+        generateFinalReport(farmData, npkResult, fertilizerPlanData),
       ]);
 
     const report = {
@@ -33,15 +34,14 @@ export async function POST(req: NextRequest) {
         phosphorus: farmData.phosphorus,
         potassium: farmData.potassium,
         moisture: farmData.soilMoisture,
-        carbon: farmData.organicCarbon,
         temperature: farmData.temperature || 0,
         ph: farmData.ph,
         conductivity: farmData.soilConductivity,
       },
-      soilCorrectionPlan: soilCorrectionData.soilCorrectionPlan,
       diseaseControl: diseasesData.diseases,
       pestControl: pestsData.pests,
       recommendations: finalReportData.reportContent,
+      fertilizerApplicationPlan: fertilizerPlanData,
     };
 
     return corsResponse(report);
@@ -92,28 +92,40 @@ async function fetchDiseases(cropName: string) {
   }
 }
 
-async function generateSoilCorrectionPlan(farmData: FarmData, npkResult: any) {
+async function generateFinalReport(farmData: FarmData, npkResult: any, fertilizerPlanData: any) {
   try {
-    const response = await axios.post(
-      `${BASE_URL}/api/report/soil-correction-plan`,
-      { farmData, npkResult }
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Error generating soil correction plan:", error);
-    throw new Error("Failed to generate soil correction plan");
-  }
-}
-
-async function generateFinalReport(farmData: FarmData, npkResult: any) {
-  try {
-    const response = await axios.post(`${BASE_URL}/api/report/final-report`, {
+    const response = await axios.post(`${BASE_URL}/api/report/recommendations`, {
       farmData,
       npkResult,
+      fertilizerPlanData,
     });
     return response.data;
   } catch (error) {
     console.error("Error generating final report:", error);
     throw new Error("Failed to generate final report");
+  }
+}
+
+async function generateFertilizerPlan(farmData: FarmData) {
+  try {
+    const payload = {
+      crop_name: farmData.cropName,
+      target_yield: farmData.targetYield,
+      field_size: farmData.fieldSize,
+      ph_water: farmData.ph,
+      organic_carbon: farmData.soilConductivity,
+      total_nitrogen: farmData.nitrogen,
+      phosphorus_m3: farmData.phosphorus,
+      potassium_exch: farmData.potassium,
+    };
+
+    const response = await axios.post(
+      `${BASE_URL}/api/fertilizer-plan`,
+      payload
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error generating fertilizer plan:", error);
+    throw new Error("Failed to generate fertilizer plan");
   }
 }

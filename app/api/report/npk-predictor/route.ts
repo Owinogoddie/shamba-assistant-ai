@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import axios from "axios";
 import { corsResponse } from "../../cors";
+import { FarmData } from "@/app/(dashboard)/report/lib/types";
 
 export async function POST(request: Request) {
-  const farmData = await request.json();
+  const farmData:FarmData = await request.json();
 
   try {
     const response = await axios.post(
@@ -13,7 +14,7 @@ export async function POST(request: Request) {
         target_yield: farmData.targetYield,
         field_size: farmData.fieldSize,
         ph: farmData.ph,
-        organic_carbon: farmData.organicCarbon,
+        organic_carbon: farmData.soilConductivity,
         nitrogen: farmData.nitrogen,
         phosphorus: farmData.phosphorus,
         potassium: farmData.potassium,

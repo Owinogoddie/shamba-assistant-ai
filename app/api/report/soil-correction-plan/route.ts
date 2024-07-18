@@ -17,7 +17,7 @@ Farm Data:
 - Target Yield: ${farmData.targetYield} kg/acre
 - Field Size: ${farmData.fieldSize} acres
 - pH: ${farmData.ph}
-- Organic Carbon: ${farmData.organicCarbon}%
+- Organic Carbon: ${farmData.soilConductivity}%
 - Nitrogen: ${farmData.nitrogen} kg/acre
 - Phosphorus: ${farmData.phosphorus} kg/acre
 - Potassium: ${farmData.potassium} kg/acre
@@ -92,7 +92,7 @@ IMPORTANT: Your entire response must be a valid JSON object. Do not include any 
         throw new Error("Failed to extract valid JSON from the response");
       }
     }
-    console.log({ result });
+    // console.log({ result });
     return corsResponse(result);
   } catch (error) {
     console.error("Error in soil correction plan analysis:", error);

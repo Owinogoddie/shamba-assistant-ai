@@ -173,7 +173,7 @@ export async function POST(request: Request) {
   );
 
   if (isMaizeRelated) {
-    console.log("Maize related disease");
+    // console.log("Maize related disease");
     try {
       const formattedPests: FormattedPest[] = maizeData.pests.map(
         (pest: Pest) => ({

@@ -7,7 +7,6 @@ export interface FarmData {
   fieldSize: number;
   targetYield: string;
   ph: string;
-  organicCarbon: string;
   nitrogen: string;
   phosphorus: string;
   potassium: string;
@@ -24,7 +23,6 @@ export interface FarmInput {
   target_yield: string | number;
   field_size: string | number;
   ph: string | number;
-  organic_carbon: string | number;
   nitrogen: string | number;
   phosphorus: string | number;
   potassium: string | number;
@@ -71,7 +69,6 @@ export interface SoilData {
   phosphorus: any;
   potassium: any;
   moisture: any;
-  carbon: any;
   temperature: any;
   ph: any;
   soilConductivity?:any;
@@ -93,8 +90,66 @@ export interface SoilAnalysisReportData {
   farmInfo: FarmInfo;
   soilData: SoilData;
   recommendations: any;
-  soilCorrectionPlan:soilCorrectionPlan[]
+  fertilizerApplicationPlan:any
   pestControl:any
   diseaseControl:any
 }
 
+export interface ModelOutput {
+  [key: string]: string | number;
+}
+
+export interface Fertilizer {
+  type: string;
+  amount: number;
+}
+
+export interface FertilizerApplication {
+  timing: string;
+  fertilizers: Fertilizer[];
+}
+
+export interface ApplicationOption {
+  firstApplication: FertilizerApplication;
+  secondApplication?: FertilizerApplication;
+}
+
+export interface SoilCorrection {
+  limeApplication?: {
+    timing: string;
+    amount: number;
+    type: string;
+  };
+  organicMatterApplication?: {
+    timing: string;
+    amount: number;
+    type: string;
+  };
+}
+
+export interface FertilizerPlan {
+  bestOption: ApplicationOption;
+  secondOption: ApplicationOption;
+  thirdOption: ApplicationOption;
+  soilCorrection?: SoilCorrection;
+}
+
+export interface ProcessedApplication {
+  timing: string;
+  fertilizer: string;
+}
+
+export interface ProcessedOption {
+  firstApplication: ProcessedApplication;
+  secondApplication: ProcessedApplication | null;
+}
+
+export interface ProcessedFertilizerPlan {
+  bestOption: ProcessedOption;
+  secondOption: ProcessedOption;
+  thirdOption: ProcessedOption;
+  soilCorrection: {
+    limeApplication: string | null;
+    organicMatterApplication: string | null;
+  } | null;
+}
