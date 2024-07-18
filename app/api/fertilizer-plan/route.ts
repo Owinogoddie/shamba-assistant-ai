@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
+import { corsResponse } from "../cors";
 import {
   ModelOutput,
   FertilizerPlan,
@@ -33,7 +34,7 @@ export async function POST(req: NextRequest) {
       potassium_exch,
     };
 
-    // Make the POST request to HUGGINGFACE  API using Axios
+    // Make the POST request to HUGGINGFACE API using Axios
     const apiResponse = await axios.post(
       "https://godfreyowino-npk-predictor-v2.hf.space/predict",
       payload
@@ -68,27 +69,28 @@ export async function POST(req: NextRequest) {
         : null,
     };
 
-    // console.log({ processedPlan });
-    return NextResponse.json(processedPlan);
+    return corsResponse(processedPlan);
   } catch (error) {
     console.error("Error:", error);
     if (axios.isAxiosError(error)) {
       console.error("Axios error:", error.response?.data);
-      return NextResponse.json(
+      return corsResponse(
         {
           error: "An error occurred while processing the request",
           details: error.response?.data,
         },
-        { status: error.response?.status || 500 }
+        error.response?.status || 500
       );
     }
-    return NextResponse.json(
+    return corsResponse(
       { error: "An error occurred while processing the request" },
-      { status: 500 }
+      500
     );
   }
 }
-
+export async function OPTIONS(request: NextRequest) {
+  return corsResponse({});
+}
 function createFertilizerPlan(modelOutput: ModelOutput): FertilizerPlan {
   const createOption = (prefixes: string[]): ApplicationOption => {
     const option: ApplicationOption = {
