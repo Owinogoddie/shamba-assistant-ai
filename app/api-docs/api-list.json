@@ -429,11 +429,11 @@
   },
   {
     "id": "final-report",
-    "title": "Final Report",
-    "shortDescription": "Generate a comprehensive farm report based on farm data and NPK results.",
+    "title": "Recommendations",
+    "shortDescription": "Generate a comprehensive recommendations based on farm data, NPK results, and fertilizer plan.",
     "endpoint": "/api/report/recommendations",
     "method": "POST",
-    "description": "This endpoint generates a comprehensive farm report using the provided farm data and NPK results.",
+    "description": "This endpoint generates a comprehensive recommendations using the provided farm data, NPK results, and fertilizer plan. The report includes detailed analysis and recommendations for soil health, nutrient management, and sustainable farming practices.",
     "requestBody": {
       "farmData": {
         "farmName": "string",
@@ -446,14 +446,15 @@
         "phosphorus": "number",
         "potassium": "number",
         "soilMoisture": "number",
-        "organicCarbon": "number",
+        "soilConductivity": "number",
         "ph": "number"
       },
       "npkResult": {
         "nitrogen_need": "number",
         "phosphorus_need": "number",
         "potassium_need": "number"
-      }
+      },
+      "fertilizerPlanData": "object"
     },
     "responseBody": {
       "reportContent": "string"
@@ -470,17 +471,33 @@
         "phosphorus": 15,
         "potassium": 25,
         "soilMoisture": 60,
-        "organicCarbon": 1.2,
+        "soilConductivity": 1.2,
         "ph": 6.5
       },
       "npkResult": {
         "nitrogen_need": 120,
         "phosphorus_need": 60,
         "potassium_need": 40
+      },
+      "fertilizerPlanData": {
+        "bestOption": {
+          "firstApplication": {
+            "timing": "At planting",
+            "fertilizer": "Apply 100.00 kg of NPK 17:17:17 combined with 50.00 kg of Urea"
+          },
+          "secondApplication": {
+            "timing": "4 weeks after planting",
+            "fertilizer": "Apply 75.00 kg of Urea"
+          }
+        },
+        "soilCorrection": {
+          "limeApplication": "Apply 200.00 kg of Agricultural lime before planting",
+          "organicMatterApplication": "Apply 1000.00 kg of Farmyard manure before planting"
+        }
       }
     },
     "exampleResponse": {
-      "reportContent": "Detailed farm report content..."
+      "reportContent": "# Comprehensive Farm Report for Green Acres\n\n## 1. Soil Health Assessment\n...\n\n## 2. Nutrient Analysis\n...\n\n## 3. Fertility Improvement Recommendations\n...\n\n## 4. Fertilizer Application Plan\n...\n\n## 5. Crop-Specific Recommendations\n...\n\n## 6. Sustainable Farming Practices\n...\n\n## 7. Economic Analysis\n...\n\n## 8. Long-term Soil Management Strategies\n..."
     },
     "errors": [
       {
