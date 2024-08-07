@@ -8,10 +8,9 @@ import {
   MapPin,
   Droplets,
 } from "lucide-react";
-import { SoilData, SoilAnalysisReportData } from "./lib/types";
+import { SoilData, SoilAnalysisReportData,ProcessedFertilizerPlan, ProcessedOption } from "./lib/types";
 import ReactMarkdown from "react-markdown";
 import Image from "next/image";
-import FertilizerPlanTable from "./_components/fertilizer-plan-table";
 
 function generateReportNumber() {
   const date = new Date();
@@ -33,7 +32,7 @@ const analyst = {
   name: "John Doe",
   date: "2024-07-10",
 };
-const SoilAnalysisReport: React.FC<SoilAnalysisReportData> = ({
+const MobileSoilAnalysisReport: React.FC<SoilAnalysisReportData> = ({
   farmInfo,
   soilData,
   recommendations,
@@ -103,39 +102,24 @@ const SoilAnalysisReport: React.FC<SoilAnalysisReportData> = ({
 
   const reportNumber = generateReportNumber();
   return (
-    <div className="max-w-4xl mx-auto p-8 shadow-lg bg-white font-sans">
+    <div className="max-w-4xl  p-2  shadow-lg bg-white font-sans -mx-4">
       {/* Main Heading */}
-      <h1 className="text-2xl font-bold text-center text-green-800 mb-8">
-        Shamba Solutions Analysis Report
+      <h1 className="text-xl md:text-2xl font-bold text-center text-green-800 mb-8">
+        Soil Analysis Report
       </h1>
 
       {/* Header */}
-      <header className="flex justify-between items-center mb-8 border-b pb-4">
-        <div className="space-y-2">
-          <p className="flex items-center"> Report No: {reportNumber}</p>
-          <h2 className="text-xl font-semibold mb-4 text-slate-400">
-            Facilitator
-          </h2>
-          <p className="flex items-center">
-            <User className="inline h-5 w-5 mr-2 text-green-500" /> john doe
-          </p>
-          <p className="flex items-center">
-            <Phone className="inline h-5 w-5 mr-2 text-green-500" /> 07070707
-          </p>
-          <p className="flex items-center">
-            <Mail className="inline h-5 w-5 mr-2 text-green-500" />{" "}
-            emai@email.com
-          </p>
-        </div>
-        <div className="flex flex-col items-end">
+      <header className="flex justify-between items-center mb-8 border-b pb-4 pl-2">
+        
+        <div className="flex flex-col">
           <Image
             src={companyInfo.logo}
             alt={`${companyInfo.name} Logo`}
             height={120}
             width={100}
-            className="h-16 mb-2"
+            className="h-16 mb-2 float-right"
           />
-          <div className="text-right">
+          <div className="">
             <h2 className="text-xl font-bold text-green-800">
               {companyInfo.name}
             </h2>
@@ -166,10 +150,10 @@ const SoilAnalysisReport: React.FC<SoilAnalysisReportData> = ({
       </section>
 
       {/* Soil Condition Cards */}
-      <section className="mb-8 grid grid-cols-4 gap-4">
+      <section className="mb-8 grid grid-cols-2 gap-2 p-2">
         {MappedData.map((item, index) => (
           <div
-            className={`flex p-4 rounded-lg justify-between items-center shadow-md border-t-4 border-${item.color}-500 bg-${item.color}-50`}
+            className={`flex p-3 rounded-lg justify-between items-center shadow-md border-t-4 border-${item.color}-500 bg-${item.color}-50`}
             key={index}
           >
             {typeof item.icon === "string" ? (
@@ -243,6 +227,7 @@ const SoilAnalysisReport: React.FC<SoilAnalysisReportData> = ({
           <h2 className="text-2xl font-semibold mb-4 text-green-800">
             Pest Control
           </h2>
+          <div className="overflow-x-auto">
           <table className="min-w-full bg-white border border-gray-300 shadow-lg rounded-lg overflow-hidden mb-8">
             <thead>
               <tr className="bg-green-100">
@@ -277,6 +262,7 @@ rateOfApplication */}
               ))}
             </tbody>
           </table>
+          </div>
         </section>
 
         {/* Disease Control */}
@@ -284,6 +270,7 @@ rateOfApplication */}
           <h2 className="text-2xl font-semibold mb-4 text-green-800">
             Disease Control
           </h2>
+          <div className="overflow-x-auto">
           <table className="min-w-full bg-white border border-gray-300 shadow-lg rounded-lg overflow-hidden mb-8">
             <thead>
               <tr className="bg-green-100">
@@ -316,6 +303,7 @@ rateOfApplication */}
               ))}
             </tbody>
           </table>
+          </div>
         </section>
       </div>
 
@@ -324,7 +312,7 @@ rateOfApplication */}
       <div className="page-break-before">
         {/* Detailed Analysis and Recommendations */}
         <section className="mb-8 p-6  bg-white">
-          <h2 className="text-2xl font-semibold mb-4 text-green-800">
+          <h2 className="text-xl font-semibold mb-4 text-green-800">
             Detailed Analysis & Recommendations
           </h2>
           <div className="space-y-4">
@@ -340,7 +328,7 @@ rateOfApplication */}
       </div>
 
       {/* Footer */}
-      <footer className="text-center text-sm text-gray-600 border-t pt-4 mt-8 fixed bottom-0 left-0 right-0 bg-white">
+      <footer className="text-center text-xs sm:text-sm text-gray-600 border-t pt-4 mt-8 static sm:fixed bottom-0 left-0 right-0 bg-white">
         <p>
           © {new Date().getFullYear()} {companyInfo.name}. All rights reserved.
         </p>
@@ -353,4 +341,109 @@ rateOfApplication */}
   );
 };
 
-export default SoilAnalysisReport;
+export default MobileSoilAnalysisReport;
+
+
+
+
+
+interface Props {
+  plan: ProcessedFertilizerPlan;
+}
+
+const FertilizerPlanTable: React.FC<Props> = ({ plan }) => {
+  const renderApplicationOption = (option: ProcessedOption, title: string) => {
+    return (
+      <div className="">
+        <h3 className="text-xl font-semibold mb-4 text-green-800">{title}</h3>
+        <div className="overflow-x-auto">
+        <table className="min-w-full bg-white border border-gray-300 shadow-lg rounded-lg overflow-hidden mb-8">
+          <thead>
+            <tr className="bg-green-100">
+              <th className="py-2 px-4 border-b">Application</th>
+              <th className="py-2 px-4 border-b">Timing</th>
+              <th className="py-2 px-4 border-b">Fertilizer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="bg-gray-50">
+              <td className="py-2 px-4 border-b">1st Application</td>
+              <td className="py-2 px-4 border-b">
+                {option.firstApplication.timing}
+              </td>
+              <td className="py-2 px-4 border-b">
+                {option.firstApplication.fertilizer}
+              </td>
+            </tr>
+            {option.secondApplication && (
+              <tr>
+                <td className="py-2 px-4 border-b">2nd Application</td>
+                <td className="py-2 px-4 border-b">
+                  {option.secondApplication.timing}
+                </td>
+                <td className="py-2 px-4 border-b">
+                  {option.secondApplication.fertilizer}
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+        </div>
+      </div>
+    );
+  };
+
+  const renderSoilCorrection = () => {
+    if (!plan.soilCorrection) return null;
+
+    return (
+      <div className="mb-8">
+        <h3 className="text-xl font-semibold mb-4 text-green-800">
+          Soil Correction
+        </h3>
+        <div className="overflow-x-auto">
+        <table className="min-w-full bg-white border border-gray-300 shadow-lg rounded-lg overflow-hidden mb-8">
+          <thead>
+            <tr className="bg-green-100">
+              <th className="py-2 px-4 border-b">Amendment</th>
+              <th className="py-2 px-4 border-b">Application</th>
+            </tr>
+          </thead>
+          <tbody>
+            {plan.soilCorrection.limeApplication && (
+              <tr className="bg-gray-50">
+                <td className="py-2 px-4 border-b">Lime</td>
+                <td className="py-2 px-4 border-b">
+                  {plan.soilCorrection.limeApplication}
+                </td>
+              </tr>
+            )}
+            {plan.soilCorrection.organicMatterApplication && (
+              <tr>
+                <td className="py-2 px-4 border-b">Organic Matter</td>
+                <td className="py-2 px-4 border-b">
+                  {plan.soilCorrection.organicMatterApplication}
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <section className="mb-8 mt-6 page-break-inside-avoid">
+      <h2 className="text-2xl font-semibold mb-4 text-green-800">
+        Fertilizer Plan
+      </h2>
+      {renderApplicationOption(plan.bestOption, "Best Option")}
+      {renderApplicationOption(plan.secondOption, "Second Option")}
+      {renderApplicationOption(plan.thirdOption, "Third Option")}
+      {renderSoilCorrection()}
+    </section>
+  );
+};
+
+

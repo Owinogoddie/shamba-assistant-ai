@@ -97,7 +97,7 @@ const SoilAnalysisPage: React.FC = () => {
 
       {report && (
         <div className="container mx-auto py-8">
-          <h1 className="text-4xl font-bold text-green-800 mb-8">
+          <h1 className="text-2xl md:text-2xl font-bold text-green-800 mb-8 text-center">
             Soil Analysis Report
           </h1>
           {isClientReportReady ? (

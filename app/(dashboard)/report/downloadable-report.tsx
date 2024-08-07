@@ -1,41 +1,39 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import { SoilAnalysisReportData } from "./lib/types";
 import SoilAnalysisReport from "./analysis-report";
+import MobileSoilAnalysisReport from "./mobile-analysis-report";
 
-interface DownloadableReportProps {
-  reportData: SoilAnalysisReportData;
-}
+const PrintableReport: React.FC<{ reportData: SoilAnalysisReportData }> = ({ reportData }) => (
+  <div style={{ width: '210mm', height: '297mm', padding: '10mm' }}>
+    <SoilAnalysisReport {...reportData} />
+  </div>
+);
 
-const DownloadableReport: React.FC<DownloadableReportProps> = ({
-  reportData,
-}) => {
-  const [isMounted, setIsMounted] = useState(false);
+const DownloadableReport: React.FC<{ reportData: SoilAnalysisReportData }> = ({ reportData }) => {
   const componentRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
     documentTitle: `Soil_Analysis_Report_${reportData.farmInfo.name}`,
     onAfterPrint: () => console.log("Printed successfully"),
   });
-  if (!isMounted) {
-    return null;
-  }
+
   return (
     <div>
-      <button
-        onClick={handlePrint}
-        className="mb-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300"
-      >
+      <button onClick={handlePrint} className="mb-4 px-4 py-2 bg-green-500 text-white rounded">
         Download PDF
       </button>
       <div className="shadow-2xl p-8 bg-gray-100">
-        <div ref={componentRef}>
+        {window.innerWidth < 900 ? (
+          <MobileSoilAnalysisReport {...reportData} />
+        ) : (
           <SoilAnalysisReport {...reportData} />
+        )}
+      </div>
+      <div style={{ display: 'none' }}>
+        <div ref={componentRef}>
+          <PrintableReport reportData={reportData} />
         </div>
       </div>
     </div>
