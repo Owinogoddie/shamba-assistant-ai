@@ -25,7 +25,7 @@ const DownloadableReport: React.FC<{ reportData: SoilAnalysisReportData }> = ({ 
         Download PDF
       </button>
       <div className="shadow-2xl p-8 bg-gray-100">
-        {window.innerWidth < 900 ? (
+        {window.innerWidth < 768 ? (
           <MobileSoilAnalysisReport {...reportData} />
         ) : (
           <SoilAnalysisReport {...reportData} />

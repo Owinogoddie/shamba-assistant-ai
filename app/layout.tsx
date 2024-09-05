@@ -19,7 +19,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>{children}
+      {/* <script>
+      window.ChatWidgetConfig = {
+      primaryColor: 'green',
+      serverUrl: 'http://localhost:3000'
+    };
+    </script> */}
+    {/* <script src="http://localhost:3000/widget.js"></script> */}
+      </body>
     </html>
   );
 }
