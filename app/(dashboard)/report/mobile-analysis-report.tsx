@@ -24,13 +24,13 @@ function generateReportNumber() {
 }
 const companyInfo = {
   name: "Shamba Solutions",
-  address: "123 Farm Road, Nairobi, Kenya",
-  contact: "info@shambasolutions.com | +254 123 456 789",
+  address: "Thika Road, KU, Kenya",
+  contact: "hello@ycenterssl.com | +254 790 566 616",
   logo: "/logo_dark.svg",
 };
 const analyst = {
-  name: "John Doe",
-  date: "2024-07-10",
+  name: "Steve Kinyua",
+  date: new Date().toISOString().split('T')[0],
 };
 const MobileSoilAnalysisReport: React.FC<SoilAnalysisReportData> = ({
   farmInfo,

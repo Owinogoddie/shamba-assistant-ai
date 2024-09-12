@@ -10,7 +10,6 @@ export async function GET() {
   );
 
   try {
-    // Perform a simple query
     const { data, error } = await client
       .from("coffee_documents")
       .select("id")
