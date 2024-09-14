@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import {
+import { 
   DownloadCloud,
   LayoutDashboard,
   MessagesSquare,
@@ -60,6 +60,12 @@ const routes = [
     icon: Stethoscope,
     href: "/animals",
     color: "text-sky-700",
+  },
+  {
+    label: "Downloads",
+    icon: DownloadCloud,
+    href: "/downloads",
+    color: "text-green-600",
   },
   {
     label: "Settings",
