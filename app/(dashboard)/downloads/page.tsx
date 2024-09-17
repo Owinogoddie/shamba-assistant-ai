@@ -9,12 +9,12 @@ const Downloads = () => {
 
   const apkFiles = [
     { 
-      name: 'ARM v7a', 
+      name: 'SHAMBA v7a', 
       filename: 'app-armeabi-v7a-release.apk', 
       fileUrl: 'https://utfs.io/f/DNXMybj6qSRCPlWqi4ZM6oc7YKUipR2ul94kzX1gm0xsQABd'
     },
     { 
-      name: 'ARM v8a', 
+      name: 'SHAMBA v8a', 
       filename: 'app-armeabi-v8a-release.apk', 
       fileUrl: 'https://utfs.io/f/DNXMybj6qSRCpbhxFTNAKvtXYw4LkBhD7mzNdSFpTE1IQrCl'
     },
