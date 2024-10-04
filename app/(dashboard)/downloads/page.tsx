@@ -1,7 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { FaWhatsapp, FaFacebookF, FaXTwitter } from 'react-icons/fa6';
-
 const Downloads = () => {
   const [copySuccess, setCopySuccess] = useState('');
   const [downloading, setDownloading] = useState<string | null>(null);
@@ -11,12 +10,12 @@ const Downloads = () => {
     { 
       name: 'SHAMBA v7a', 
       filename: 'app-armeabi-v7a-release.apk', 
-      fileUrl: 'https://utfs.io/f/DNXMybj6qSRCPlWqi4ZM6oc7YKUipR2ul94kzX1gm0xsQABd'
+      fileUrl: 'https://utfs.io/f/DNXMybj6qSRCKY5Cwk5tenwiasSHh3U6PA1XltTFjOc5rBK2'
     },
     { 
       name: 'SHAMBA v8a', 
       filename: 'app-armeabi-v8a-release.apk', 
-      fileUrl: 'https://utfs.io/f/DNXMybj6qSRCpbhxFTNAKvtXYw4LkBhD7mzNdSFpTE1IQrCl'
+      fileUrl: 'https://utfs.io/f/DNXMybj6qSRCKY5Cwk5tenwiasSHh3U6PA1XltTFjOc5rBK2'
     },
   ];
 
