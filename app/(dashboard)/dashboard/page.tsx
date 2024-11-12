@@ -54,7 +54,7 @@ export default function DashboardPage() {
     <div>
       <div className="mb-8 space-y-4">
         <h2 className="text-2xl md:text-4xl font-bold text-center">
-          Your farm assistant you will ever need
+          Your shambah assistant you will ever need
         </h2>
         <p className="text-muted-foreground text-sm md:text-lg font-light text-center">
           Explore the power of AI to your farm

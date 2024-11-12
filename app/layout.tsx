@@ -5,10 +5,10 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Shamba assistant-ai",
-  description: "Shamba-assistant - Your Digital Farming Companion",
+  title: "Shambah assistant-ai",
+  description: "Shambah-assistant - Your Digital Farming Companion",
   icons:{
-    icon:"/logo.svg"
+    icon:"/shambah-logo.png"
   }
 };
 

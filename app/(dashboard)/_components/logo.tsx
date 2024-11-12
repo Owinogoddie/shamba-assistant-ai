@@ -13,9 +13,9 @@ export const Logo = () => {
     <div>
       <Link href="/" className="flex items-center pl-3 mb-14">
         <div className=" relative h-8 w-8 mr-4">
-          <Image fill alt="logo" src="/logo.svg" />
+          <Image fill alt="logo" src="/shambah-logo.png" />
         </div>
-        <h2 className={cn("text-2xl font-bold text-white")}>Farm <span className="text-capitalize text-emerald-400 font-extrabold">assistant</span></h2>
+        <h2 className={cn("text-2xl font-bold text-white")}>Shambah <span className="text-capitalize text-emerald-400 font-extrabold">assistant</span></h2>
       </Link>
     </div>
   );

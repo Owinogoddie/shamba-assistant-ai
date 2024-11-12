@@ -9,9 +9,9 @@ export const LandingNavbar = () => {
     <nav className="p-4 bg-transparent flex items-center justify-between">
       <Link href="/" className="flex items-center">
         <div className="relative h-12 w-8 mr-4">
-          <Image src="/logo.svg" alt="logo" fill />
+          <Image src="/shambah-logo.png" alt="logo" fill />
         </div>
-        <h2 className={cn("text-2xl font-bold text-white")}>Shamba <span className="text-capitalize text-emerald-700 font-extrabold">assistant</span></h2>
+        <h2 className={cn("text-2xl font-bold text-white")}>Shambah <span className="text-capitalize text-emerald-700 font-extrabold">assistant</span></h2>
       </Link>
       <div className="flex items-center gap-x-2">
         <Link href="/dashboard">
